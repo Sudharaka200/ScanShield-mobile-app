@@ -24,7 +24,7 @@ public class loading2 extends AppCompatActivity {
         logo2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent logo2Click =  new Intent(getApplicationContext(), get_started_1.class);
+                Intent logo2Click =  new Intent(getApplicationContext(), home.class);
                 startActivity(logo2Click);
             }
         });
