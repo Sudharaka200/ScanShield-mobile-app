@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DialButton">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:background">@drawable/circle_button</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#000</item>
+    </style>
+
+</resources>
