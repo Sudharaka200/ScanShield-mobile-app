@@ -87,7 +87,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/btnGetSTarted"
+        android:id="@+id/btnNext2"
         android:layout_width="381dp"
         android:layout_height="46dp"
         android:text="Get Stared"
