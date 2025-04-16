@@ -16,5 +16,14 @@ public class get_started2 extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_get_started2);
 
+        //Button Naviagation
+         Button buttonNext = findViewById(R.id.btnNext2);
+         buttonNext.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Intent intentBtnNext = new Intent(getApplicationContext(), get_started3.class);
+                 startActivity(intentBtnNext);
+             }
+         });
     }
 }

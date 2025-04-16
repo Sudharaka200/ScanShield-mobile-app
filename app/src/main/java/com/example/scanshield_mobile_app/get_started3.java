@@ -7,9 +7,6 @@ import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class get_started3 extends AppCompatActivity {
 
@@ -19,11 +16,11 @@ public class get_started3 extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_get_started3);
 
-        Button buttonGetStarted = findViewById(R.id.btnGetSTarted);
+        Button buttonGetStarted = findViewById(R.id.btnNext2);
         buttonGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent geStartedIntent = new Intent(getApplicationContext(), home.class);
+                Intent geStartedIntent = new Intent(getApplicationContext(), login.class);
                 startActivity(geStartedIntent);
             }
         });
