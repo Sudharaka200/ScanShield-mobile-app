@@ -20,15 +20,16 @@ public class get_started_1 extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_get_started1);
 
-        //Testing
-        Button buttonNext1 = findViewById(R.id.btnNext1);
-        buttonNext1.setOnClickListener(new View.OnClickListener() {
+        //Getstarted Button
+        Button buttonGetstarted =  findViewById(R.id.btnGetSTarted);
+        buttonGetstarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent nextIntent1 = new Intent(getApplicationContext(), get_started2.class);
-                startActivity(nextIntent1);
+                Intent getStartedBtn =  new Intent(getApplicationContext(), get_started2.class);
+                startActivity(getStartedBtn);
             }
         });
+
 
     }
 }

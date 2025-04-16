@@ -2,6 +2,7 @@ package com.example.scanshield_mobile_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -19,18 +20,14 @@ public class loading2 extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_loading2);
 
-        //Testing- Logo2 Click
-        ImageView logo2 = findViewById(R.id.imageView2);
-        logo2.setOnClickListener(new View.OnClickListener() {
+        //Loading Delay
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View view) {
-                Intent logo2Click =  new Intent(getApplicationContext(), home.class);
-                startActivity(logo2Click);
+            public void run() {
+                Intent LogosecondIntent = new Intent(loading2.this, get_started_1.class);
+                startActivity(LogosecondIntent);
+                finish();
             }
-        });
-
-
-
-
+        },2000);
     }
 }
