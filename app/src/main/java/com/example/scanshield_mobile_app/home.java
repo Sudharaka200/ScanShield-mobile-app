@@ -42,11 +42,11 @@ public class home extends AppCompatActivity {
         });
 
         //Message Button
-        LinearLayout buttonMesssages =  findViewById(R.id.message_home);
-        buttonMesssages.setOnClickListener(new View.OnClickListener() {
+        LinearLayout buttonMessage = findViewById(R.id.messages_home);
+        buttonMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent messageIntent = new Intent(getApplicationContext(), message_history.class);
+                Intent messageIntent =  new Intent(getApplicationContext(), message_history.class);
                 startActivity(messageIntent);
             }
         });
