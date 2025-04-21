@@ -257,6 +257,40 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="8dp"
+                        app:cardBackgroundColor="#FFF"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="6dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:id="@+id/serach_home"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <ImageView
+                                android:id="@+id/searchimg"
+                                android:layout_width="50dp"
+                                android:layout_height="40dp"
+                                android:scaleType="centerInside"
+                                app:srcCompat="@drawable/search" />
+
+                            <TextView
+                                android:id="@+id/searchtxt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Search"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_marginEnd="8dp"
                         app:cardBackgroundColor="#FFF"
                         app:cardCornerRadius="12dp"
@@ -296,7 +330,7 @@
                         app:cardElevation="6dp">
 
                         <LinearLayout
-                            android:id="@+id/message_home"
+                            android:id="@+id/messages_home"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
