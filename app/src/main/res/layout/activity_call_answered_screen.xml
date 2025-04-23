@@ -54,8 +54,6 @@
         android:layout_marginTop="30dp">
 
         <!-- Buttons 1-9 -->
-
-
         <Button
             android:id="@+id/btn1"
             style="@style/CallButton"
@@ -68,32 +66,32 @@
             android:id="@+id/btn2"
             style="@style/CallButton"
             android:drawableTop="@drawable/number_pad"
-            android:padding="12dp"/>/>
+            android:padding="12dp"/>
 
         <Button
             android:id="@+id/btn3"
             style="@style/CallButton"
             android:drawableTop="@drawable/speaker"
-            android:padding="12dp"/>/>
+            android:padding="12dp"/>
 
         <Button
             android:id="@+id/btn4"
             style="@style/CallButton"
             android:drawableTop="@drawable/plus_math"
             android:padding="12dp"/>
-            />
+
 
         <Button
             android:id="@+id/btn5"
             style="@style/CallButton"
             android:drawableTop="@drawable/video_call"
-            android:padding="12dp"/>/>
+            android:padding="12dp"/>
 
         <Button
             android:id="@+id/btn6"
             style="@style/CallButton"
             android:drawableTop="@drawable/user1"
-            android:padding="12dp"/>/>
+            android:padding="12dp"/>
 
     </GridLayout>
 

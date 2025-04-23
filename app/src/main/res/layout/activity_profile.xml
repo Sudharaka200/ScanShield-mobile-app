@@ -237,7 +237,10 @@
                 android:id="@+id/btn_Wlogin"
                 android:layout_width="280dp"
                 android:layout_height="44dp"
-                android:text="Without Login"
+                android:text="Logout"
+                android:background="@drawable/rounded_button4"
+                android:textColor="#FFF"
+
                 android:layout_gravity="center" />
 
         </LinearLayout>
