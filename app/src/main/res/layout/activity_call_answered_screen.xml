@@ -50,24 +50,59 @@
         android:columnCount="3"
         android:rowCount="3"
         android:layout_gravity="center"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="30dp">
 
         <!-- Buttons 1-9 -->
-        <Button android:id="@+id/btn1" style="@style/DialButton" android:text="1" />
-        <Button android:id="@+id/btn2" style="@style/DialButton" android:text="2" />
-        <Button android:id="@+id/btn3" style="@style/DialButton" android:text="3" />
-        <Button android:id="@+id/btn4" style="@style/DialButton" android:text="4" />
-        <Button android:id="@+id/btn5" style="@style/DialButton" android:text="5" />
-        <Button android:id="@+id/btn6" style="@style/DialButton" android:text="6" />
+
+
+        <Button
+            android:id="@+id/btn1"
+            style="@style/CallButton"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:drawableTop="@drawable/mute_unmute"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/btn2"
+            style="@style/CallButton"
+            android:drawableTop="@drawable/number_pad"
+            android:padding="12dp"/>/>
+
+        <Button
+            android:id="@+id/btn3"
+            style="@style/CallButton"
+            android:drawableTop="@drawable/speaker"
+            android:padding="12dp"/>/>
+
+        <Button
+            android:id="@+id/btn4"
+            style="@style/CallButton"
+            android:drawableTop="@drawable/plus_math"
+            android:padding="12dp"/>
+            />
+
+        <Button
+            android:id="@+id/btn5"
+            style="@style/CallButton"
+            android:drawableTop="@drawable/video_call"
+            android:padding="12dp"/>/>
+
+        <Button
+            android:id="@+id/btn6"
+            style="@style/CallButton"
+            android:drawableTop="@drawable/user1"
+            android:padding="12dp"/>/>
+
     </GridLayout>
 
     <ImageButton
         android:id="@+id/callButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
-        android:background="@drawable/circle_background"
-        android:src="@android:drawable/ic_menu_call"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/circle_background2"
+        app:srcCompat="@drawable/callcut"
         android:layout_gravity="center"/>
 
 </LinearLayout>

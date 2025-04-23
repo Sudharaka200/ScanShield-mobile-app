@@ -9,4 +9,13 @@
         <item name="android:textColor">#000</item>
     </style>
 
+    <style name="CallButton">
+        <item name="android:layout_width">90dp</item>
+        <item name="android:layout_height">90dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:background">@drawable/circle_call_button</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#0066FF</item>
+    </style>
+
 </resources>
