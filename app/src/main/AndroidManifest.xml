@@ -13,6 +13,12 @@
         android:theme="@style/Theme.ScanShieldmobileapp"
         tools:targetApi="31">
         <activity
+            android:name=".message_history_test"
+            android:exported="false" />
+        <activity
+            android:name=".normal_calls"
+            android:exported="false" />
+        <activity
             android:name=".call_answered_screen"
             android:exported="false" />
         <activity

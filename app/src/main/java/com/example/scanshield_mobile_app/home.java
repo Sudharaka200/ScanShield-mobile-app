@@ -31,6 +31,16 @@ public class home extends AppCompatActivity {
             }
         });
 
+        //Search Button
+        LinearLayout buttonSearch = findViewById(R.id.serach_home);
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(getApplicationContext(), number_search.class);
+                startActivity(searchIntent);
+            }
+        });
+
         // call button
         LinearLayout buttonCalls = findViewById(R.id.calls_home);
         buttonCalls.setOnClickListener(new View.OnClickListener() {
@@ -42,11 +52,11 @@ public class home extends AppCompatActivity {
         });
 
         //Message Button
-        LinearLayout buttonMessage = findViewById(R.id.messages_home);
-        buttonMessage.setOnClickListener(new View.OnClickListener() {
+        LinearLayout buttonMessages = findViewById(R.id.messages_home);
+        buttonMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent messageIntent =  new Intent(getApplicationContext(), message_history.class);
+                Intent messageIntent = new Intent(getApplicationContext(), message_history_test.class);
                 startActivity(messageIntent);
             }
         });
@@ -72,6 +82,14 @@ public class home extends AppCompatActivity {
         });
 
         //settings Button
+        LinearLayout buttonSettings = findViewById(R.id.setting_home);
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent settingsIntent = new Intent(getApplicationContext(), profile.class);
+                startActivity(settingsIntent);
+            }
+        });
 
 
 
