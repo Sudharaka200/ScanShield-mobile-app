@@ -32,11 +32,12 @@
 
     <Button
         android:id="@+id/btn_login_successfully"
-        style="@style/Widget.Material3.Button"
         android:layout_width="280dp"
         android:layout_height="44dp"
         android:layout_marginTop="28dp"
         android:text="Home"
+        android:textColor="#FFF"
+        android:background="@drawable/rounded_button2"
         app:layout_constraintEnd_toEndOf="@+id/textView16"
         app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="@+id/textView16"
