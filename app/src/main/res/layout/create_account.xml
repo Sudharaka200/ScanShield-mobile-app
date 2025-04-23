@@ -83,6 +83,8 @@
         android:layout_height="44dp"
         android:layout_marginTop="128dp"
         android:text="Sign up"
+        android:textColor="@color/black"
+        android:background="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/email_txt"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/email_txt"
