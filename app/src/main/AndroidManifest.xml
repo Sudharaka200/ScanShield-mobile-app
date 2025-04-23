@@ -26,6 +26,9 @@
         android:theme="@style/Theme.ScanShieldmobileapp"
         tools:targetApi="31">
         <activity
+            android:name=".number_search"
+            android:exported="false" />
+        <activity
             android:name=".profile"
             android:exported="false" />
         <activity
