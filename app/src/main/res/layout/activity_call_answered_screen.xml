@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F1F1F1"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2:02:59"
+        android:gravity="center"
+        android:textColor="#0066FF"
+        android:layout_marginTop="70dp"/>
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/male_user"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Anne Maria"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#0066FF" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+971- 9XXXXXXXXX"
+        android:gravity="center"
+        android:textColor="#0066FF" />
+
+    <GridLayout
+        android:id="@+id/dialPad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:rowCount="3"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp">
+
+        <!-- Buttons 1-9 -->
+        <Button android:id="@+id/btn1" style="@style/DialButton" android:text="1" />
+        <Button android:id="@+id/btn2" style="@style/DialButton" android:text="2" />
+        <Button android:id="@+id/btn3" style="@style/DialButton" android:text="3" />
+        <Button android:id="@+id/btn4" style="@style/DialButton" android:text="4" />
+        <Button android:id="@+id/btn5" style="@style/DialButton" android:text="5" />
+        <Button android:id="@+id/btn6" style="@style/DialButton" android:text="6" />
+    </GridLayout>
+
+    <ImageButton
+        android:id="@+id/callButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:background="@drawable/circle_background"
+        android:src="@android:drawable/ic_menu_call"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
