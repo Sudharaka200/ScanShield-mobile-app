@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 import android.Manifest;
 
 import android.Manifest;
-
+import android.widget.Toast;
 
 
 import androidx.activity.EdgeToEdge;
@@ -40,32 +41,10 @@ public class home extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
 
+        CheckUserPermission();
+
         //SMS Permission
         ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.READ_SMS}, 1);
-        ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.RECEIVE_SMS}, 2);
-
-        //Call Permission
-        ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 3);
-        ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.READ_CALL_LOG}, 4);
-        ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.CALL_PHONE}, 5);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // Dailpad button
         LinearLayout buttonDialPad = findViewById(R.id.dialpad_home);
@@ -136,39 +115,39 @@ public class home extends AppCompatActivity {
                 startActivity(settingsIntent);
             }
         });
-        
-        //NavigationBar
-//        NavigationView navigationView = findViewById(R.id.bottom_navigation);
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                int id = item.getItemId();
-//
-//                if (id == R.id.nav_home2){
-//                    startActivity(new Intent(getApplicationContext(),home.class));
-//                } else if (id == R.id.setting_home) {
-//                    startActivity(new Intent(getApplicationContext(), protection.class));
-//                } else if (id == R.id.nav_profile3){
-//                    startActivity(new Intent(getApplicationContext(), profile.class));
-//                }
-//
-//                DrawerLayout drawerLayout = findViewById(R.id.bottom_navigation);
-//                drawerLayout.closeDrawer(GravityCompat.START);
-//                return false;
-//            }
-//        });
-
-//        TextView txtMessage;
-//        TextView txtMessageTime;
-//
-//        txtMessage = findViewById(R.id.textMessages);
-//        ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
 
     }
 
-//    public void Read_SMS(View view){
-//
-//        Cursor cursor = getContentResolver().query(Uri.parse("contenr://name"))
-//
-//    }
+    void CheckUserPermission(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{
+                    Manifest.permission.RECEIVE_SMS,
+                    Manifest.permission.READ_SMS
+            }, REQUEST_CODE_ASK_PERMISSIONS);
+        }
+
+    }
+
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResutl){
+        switch (requestCode){
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                if (grantResutl[0] == PackageManager.PERMISSION_GRANTED){
+
+                }else {
+                    Toast.makeText(this,"denailed" , Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode,permissions,grantResutl);
+        }
+    }
 }
