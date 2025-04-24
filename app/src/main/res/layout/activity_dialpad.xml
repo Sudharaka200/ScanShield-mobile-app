@@ -68,13 +68,15 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/numberDisplay"
+                    android:id="@+id/Entered_Numbers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30sp"
-                    android:text="1236789"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="16dp"/>
+                    android:textSize="50dp"
+                    android:layout_marginBottom="10dp"
+                    android:ems="10"
+                    android:gravity="end"
+                    android:inputType="text"
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/addNumberText"
@@ -89,31 +91,35 @@
                     android:id="@+id/dialPad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-15dp"
                     android:columnCount="3"
                     android:rowCount="3"
                     android:layout_gravity="center"
                     android:layout_marginBottom="24dp">
 
                     <!-- Buttons 1-9 -->
-                    <Button android:id="@+id/btn1" style="@style/DialButton" android:text="1" />
-                    <Button android:id="@+id/btn2" style="@style/DialButton" android:text="2" />
-                    <Button android:id="@+id/btn3" style="@style/DialButton" android:text="3" />
-                    <Button android:id="@+id/btn4" style="@style/DialButton" android:text="4" />
-                    <Button android:id="@+id/btn5" style="@style/DialButton" android:text="5" />
-                    <Button android:id="@+id/btn6" style="@style/DialButton" android:text="6" />
-                    <Button android:id="@+id/btn7" style="@style/DialButton" android:text="7" />
-                    <Button android:id="@+id/btn8" style="@style/DialButton" android:text="8" />
-                    <Button android:id="@+id/btn9" style="@style/DialButton" android:text="9" />
+                    <Button android:id="@+id/NumButton1" style="@style/DialButton" android:text="1" />
+                    <Button android:id="@+id/NumButton2" style="@style/DialButton" android:text="2" />
+                    <Button android:id="@+id/NumButton3" style="@style/DialButton" android:text="3" />
+                    <Button android:id="@+id/NumButton4" style="@style/DialButton" android:text="4" />
+                    <Button android:id="@+id/NumButton5" style="@style/DialButton" android:text="5" />
+                    <Button android:id="@+id/NumButton6" style="@style/DialButton" android:text="6" />
+                    <Button android:id="@+id/NumButton7" style="@style/DialButton" android:text="7" />
+                    <Button android:id="@+id/NumButton8" style="@style/DialButton" android:text="8" />
+                    <Button android:id="@+id/NumButton9" style="@style/DialButton" android:text="9" />
+                    <Button android:id="@+id/NumButton10" style="@style/DialButton" android:text="*" />
+                    <Button android:id="@+id/NumButton11" style="@style/DialButton" android:text="0" />
+                    <Button android:id="@+id/NumButton12" style="@style/DialButton" android:text="#" />
                 </GridLayout>
 
                 <ImageButton
                     android:id="@+id/callButton"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:backgroundTint="@android:color/holo_blue_dark"
-                    android:background="@drawable/circle_background"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="-20dp"
+
+                    android:background="@drawable/circle_call_button"
                     android:src="@android:drawable/ic_menu_call"
-                    android:tint="@android:color/white"
                     android:layout_gravity="center"/>
 
             </LinearLayout>
