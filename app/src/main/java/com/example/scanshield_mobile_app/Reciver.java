@@ -8,39 +8,48 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Reciver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Bundle bundle = intent.getExtras();
+        if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                Object[] pdus = (Object[]) bundle.get("pdus");
+                if (pdus != null) {
+                    for (Object pdu : pdus) {
+                        SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdu, bundle.getString("format"));
+                        String sender = smsMessage.getDisplayOriginatingAddress();
+                        String messageBody = smsMessage.getMessageBody();
 
-        if (intent.getAction().equalsIgnoreCase("com.example.Broacast")){
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference ref = database.getReference("messageData");
 
-            String msg = bundle.getString("msg");
-            Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
-        }
+                        message_F message_f = new message_F();
+                        message_f.setPhoneNumber(sender);
+                        message_f.setMessage(messageBody);
+                        message_f.setDateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
 
-        if (intent.getAction().equalsIgnoreCase("android.provider.Telephony.SMS_RECEIVED")){
-
-            if (bundle != null){
-                final Object[] pdusObj = (Object[])bundle.get("pdus");
-                SmsMessage[] messages = new SmsMessage[pdusObj.length];
-                for (int i = 0; i < messages.length; i++){
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                        String format = bundle.getString("format");
-                        messages[i] = SmsMessage.createFromPdu((byte[]) pdusObj[i], format);
+                        ref.push().setValue(message_f);
                     }
-                    else {
-                        messages[i] = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
-                    }
-
-//                    SmsMessage currentMessage = SmsMessage.createFromPdu((byte[]) pdusObj[i]);
-                    String senderNum = messages[i].getOriginatingAddress();
-                    String message = messages[i].getMessageBody();
-                    //Sms Recived
-                    Toast.makeText(context,senderNum +":"+message ,Toast.LENGTH_LONG).show();
                 }
             }
         }
+
+
+
+
+
+
+
+
+
     }
 }

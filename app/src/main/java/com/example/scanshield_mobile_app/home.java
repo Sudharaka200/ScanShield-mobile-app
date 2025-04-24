@@ -32,8 +32,18 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class home extends AppCompatActivity {
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private message_F message_f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +52,65 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         CheckUserPermission();
+        navigationButtons();
 
-        //SMS Permission
+        // SMS Permission
         ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.READ_SMS}, 1);
 
+        // Firebase setup
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("messageData");
+
+    }
+
+    private void addDataToFirebase(String phoneNumber, String message) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String currentDateTime = sdf.format(new Date());
+
+        message_F message_f = new message_F();
+        message_f.setPhoneNumber(phoneNumber);
+        message_f.setMessage(message);
+        message_f.setDateTime(currentDateTime);
+
+        databaseReference.push().setValue(message_f)
+                .addOnSuccessListener(aVoid ->
+                        Toast.makeText(home.this, "Data added successfully!", Toast.LENGTH_SHORT).show()
+                ).addOnFailureListener(e ->
+                        Toast.makeText(home.this, "Failed to add data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
+    void CheckUserPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(new String[]{
+                    Manifest.permission.RECEIVE_SMS,
+                    Manifest.permission.READ_SMS
+            }, REQUEST_CODE_ASK_PERMISSIONS);
+        }
+    }
+
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResutl) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                if (grantResutl.length > 0 && grantResutl[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResutl);
+        }
+    }
+
+    public void navigationButtons(){
         // Dailpad button
         LinearLayout buttonDialPad = findViewById(R.id.dialpad_home);
         buttonDialPad.setOnClickListener(new View.OnClickListener() {
@@ -115,39 +180,5 @@ public class home extends AppCompatActivity {
                 startActivity(settingsIntent);
             }
         });
-
-    }
-
-    void CheckUserPermission(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)
-                != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissions(new String[]{
-                    Manifest.permission.RECEIVE_SMS,
-                    Manifest.permission.READ_SMS
-            }, REQUEST_CODE_ASK_PERMISSIONS);
-        }
-
-    }
-
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResutl){
-        switch (requestCode){
-            case REQUEST_CODE_ASK_PERMISSIONS:
-                if (grantResutl[0] == PackageManager.PERMISSION_GRANTED){
-
-                }else {
-                    Toast.makeText(this,"denailed" , Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode,permissions,grantResutl);
-        }
     }
 }
