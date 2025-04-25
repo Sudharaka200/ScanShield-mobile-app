@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +31,23 @@ import java.util.Objects;
 
 public class signUp extends AppCompatActivity {
 
-    TextView txtUsername, txtEmail, txtPhoneNumber, txtPassword, txtRetypePassword;
+    EditText txtUsername, txtEmail, txtPhoneNumber, txtPassword, txtRetypePassword;
     Button butttonSignIn;
     FirebaseAuth mAuth;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            Intent intentLogin = new Intent(getApplicationContext(),login_successfully.class);
+            startActivity(intentLogin);
+            finish();
+
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
