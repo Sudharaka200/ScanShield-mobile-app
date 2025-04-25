@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,17 @@ public class login extends AppCompatActivity {
                 startActivity(intentBtnLogin);
             }
         });
+
+        //button signup
+        TextView buttonSignUp = findViewById(R.id.signup_txt);
+        buttonSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentBtnSignUp = new Intent(getApplicationContext(), signUp.class);
+                startActivity(intentBtnSignUp);
+            }
+        });
+
 
         //Button Withoutlogin
         Button buttonWithoutLogin =  findViewById(R.id.btn_Wlogin);
