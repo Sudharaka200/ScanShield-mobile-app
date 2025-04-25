@@ -5,11 +5,10 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
+
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-
-
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScanShieldmobileapp"
         tools:targetApi="31">
+        <activity
+            android:name=".signUp"
+            android:exported="false" />
         <activity
             android:name=".message_history_test"
             android:exported="false" />
@@ -41,10 +43,9 @@
             android:exported="false" />
         <activity
             android:name=".login_successfully"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".registration"-->
-<!--            android:exported="false" />-->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".registration" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".login"
             android:exported="false" />
@@ -87,10 +88,14 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".Reciver" android:exported="true">
+        <receiver
+            android:name=".Reciver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.example.Broacast" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>

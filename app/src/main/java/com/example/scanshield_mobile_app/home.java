@@ -32,6 +32,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -45,6 +47,23 @@ public class home extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private message_F message_f;
 
+    FirebaseAuth mAuth;
+    TextView lUser;
+    FirebaseUser user;
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if(currentUser != null){
+//            Intent intentLogin = new Intent(getApplicationContext(),home.class);
+//            startActivity(intentLogin);
+//            finish();
+//
+//        }
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +72,7 @@ public class home extends AppCompatActivity {
 
         CheckUserPermission();
         navigationButtons();
+        userCheck();
 
         // SMS Permission
         ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.READ_SMS}, 1);
@@ -107,6 +127,22 @@ public class home extends AppCompatActivity {
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResutl);
+        }
+    }
+
+
+    public void userCheck(){
+        mAuth = FirebaseAuth.getInstance();
+        lUser = findViewById(R.id.LogUserEmailHome);
+        user = mAuth.getCurrentUser();
+
+        if (user == null){
+            Intent loginIntent = new Intent(getApplicationContext(), login.class);
+            startActivity(loginIntent);
+            finish();
+        }
+        else {
+            lUser.setText(user.getEmail());
         }
     }
 
