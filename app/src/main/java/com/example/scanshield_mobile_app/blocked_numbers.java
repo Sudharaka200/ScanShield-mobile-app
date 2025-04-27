@@ -30,11 +30,12 @@ public class blocked_numbers extends AppCompatActivity {
 
         userCheck();
 
+
     }
 
     public void userCheck(){
         mAuth = FirebaseAuth.getInstance();
-        lUser = findViewById(R.id.LogUserEmailHome);
+        lUser = findViewById(R.id.logUserEmailBlockedCalls);
         user = mAuth.getCurrentUser();
 
         if (user == null){
