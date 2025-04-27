@@ -84,10 +84,16 @@ public class home extends AppCompatActivity {
     }
 
     private void addDataToFirebase(String phoneNumber, String message) {
+        if (user == null) {
+            Toast.makeText(home.this, "User not logged in. Cannot save data.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String currentDateTime = sdf.format(new Date());
 
         message_F message_f = new message_F();
+        message_f.setEmail(user.getEmail());
         message_f.setPhoneNumber(phoneNumber);
         message_f.setMessage(message);
         message_f.setDateTime(currentDateTime);
@@ -99,6 +105,7 @@ public class home extends AppCompatActivity {
                         Toast.makeText(home.this, "Failed to add data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
+
 
     void CheckUserPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)
