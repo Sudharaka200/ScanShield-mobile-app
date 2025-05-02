@@ -42,14 +42,5 @@ public class Reciver extends BroadcastReceiver {
                 }
             }
         }
-
-
-
-
-
-
-
-
-
     }
 }

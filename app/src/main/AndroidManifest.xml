@@ -20,6 +20,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScanShieldmobileapp"
         tools:targetApi="31">
+
+        <activity
+            android:name=".home"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".settings"
+            android:exported="false" />
+        <activity
+            android:name=".profile"
+            android:exported="false" />
+
         <activity
             android:name=".signUp"
             android:exported="false" />
@@ -34,9 +50,6 @@
             android:exported="false" />
         <activity
             android:name=".number_search"
-            android:exported="false" />
-        <activity
-            android:name=".profile"
             android:exported="false" />
         <activity
             android:name=".protection"
@@ -61,9 +74,7 @@
         <activity
             android:name=".call_history"
             android:exported="false" />
-        <activity
-            android:name=".home"
-            android:exported="false" /> <!-- <activity -->
+<!-- <activity -->
         <!-- android:name=".login" -->
         <!-- android:exported="false" /> -->
         <activity
@@ -83,22 +94,17 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <receiver
             android:name=".Reciver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.example.Broacast" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
     </application>
-
 </manifest>
