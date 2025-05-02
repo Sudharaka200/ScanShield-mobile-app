@@ -14,10 +14,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 public class dialpad extends AppCompatActivity {
+
+    FirebaseAuth mAuth;
+    TextView logUser;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +34,27 @@ public class dialpad extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dialpad);
 
+        dialPadButtons();
+        userCheck();
+
+
+    }
+
+    public void userCheck(){
+
+        mAuth = FirebaseAuth.getInstance();
+        logUser = findViewById(R.id.logUserEmailDialPad);
+        user = mAuth.getCurrentUser();
+
+        if (user == null){
+
+        }else {
+            logUser.setText(user.getEmail());
+        }
+
+    }
+
+    public void dialPadButtons(){
         //DialPad Setup
         TextView numberDisplay = findViewById(R.id.Entered_Numbers);
         Button btn1 =  findViewById(R.id.NumButton1);
@@ -138,6 +168,7 @@ public class dialpad extends AppCompatActivity {
             }
         });
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -156,5 +187,6 @@ public class dialpad extends AppCompatActivity {
                 }
             }
         });
+
     }
 }

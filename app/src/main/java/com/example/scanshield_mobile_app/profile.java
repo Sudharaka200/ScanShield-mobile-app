@@ -2,7 +2,11 @@ package com.example.scanshield_mobile_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.view.MenuItem;
+
+import android.widget.TextView;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -11,16 +15,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class profile extends AppCompatActivity {
+
+    FirebaseAuth mAuth;
+    TextView logedUser;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -40,6 +53,24 @@ public class profile extends AppCompatActivity {
                 }
             }
         });
+
+
+        userCheck();
+;
+
+    }
+
+    public void userCheck(){
+
+        mAuth = FirebaseAuth.getInstance();
+        logedUser = findViewById(R.id.logedUserEmailProfile);
+        user = mAuth.getCurrentUser();
+
+        if (user ==  null){
+
+        }else {
+            logedUser.setText(user.getEmail());
+        }
 
     }
 }
