@@ -48,8 +48,12 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-firestore")
+
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.metadata)
+
+    implementation(libs.cardview)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
