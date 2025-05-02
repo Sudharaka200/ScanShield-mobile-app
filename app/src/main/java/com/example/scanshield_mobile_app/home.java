@@ -31,6 +31,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -81,6 +83,25 @@ public class home extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("messageData");
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_home) {
+                    startActivity(new Intent(home.this, home.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_settings) {
+                    startActivity(new Intent(home.this, settings.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_profile) {
+                    startActivity(new Intent(home.this, profile.class));
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
     }
 
     private void addDataToFirebase(String phoneNumber, String message) {
@@ -119,7 +140,6 @@ public class home extends AppCompatActivity {
             }, REQUEST_CODE_ASK_PERMISSIONS);
         }
     }
-
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     @Override
@@ -219,7 +239,7 @@ public class home extends AppCompatActivity {
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent settingsIntent = new Intent(getApplicationContext(), profile.class);
+                Intent settingsIntent = new Intent(getApplicationContext(), settings.class);
                 startActivity(settingsIntent);
             }
         });
