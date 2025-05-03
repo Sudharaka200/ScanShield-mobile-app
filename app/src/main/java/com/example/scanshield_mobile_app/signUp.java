@@ -1,20 +1,16 @@
 package com.example.scanshield_mobile_app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,33 +18,35 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class signUp extends AppCompatActivity {
 
+    private static final String PREFS_NAME = "UserPrefs";
+    private static final String KEY_EMAIL = "userEmail";
+    private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
+    private static final String TAG = "SignUpActivity";
+
     EditText txtUsername, txtEmail, txtPhoneNumber, txtPassword, txtRetypePassword;
-    Button butttonSignIn;
+    Button buttonSignUp;
     FirebaseAuth mAuth;
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if user is signed in
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intentLogin = new Intent(getApplicationContext(),login_successfully.class);
-            startActivity(intentLogin);
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if (currentUser != null && prefs.getBoolean(KEY_IS_LOGGED_IN, false)) {
+            Intent intent = new Intent(getApplicationContext(), home.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
-
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
-
-
 
         mAuth = FirebaseAuth.getInstance();
         txtUsername = findViewById(R.id.usernameSignup);
@@ -56,72 +54,77 @@ public class signUp extends AppCompatActivity {
         txtPhoneNumber = findViewById(R.id.phoneNumberSignup);
         txtPassword = findViewById(R.id.passwordSignup);
         txtRetypePassword = findViewById(R.id.retypePasswordSignup);
-        butttonSignIn = findViewById(R.id.btn_signup);
+        buttonSignUp = findViewById(R.id.btn_signup);
 
-        butttonSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String uUsername, uEmail, uPhoneNumber,uPassword, uRetypePassword;
+        buttonSignUp.setOnClickListener(v -> {
+            String uUsername = txtUsername.getText().toString().trim();
+            String uEmail = txtEmail.getText().toString().trim();
+            String uPhoneNumber = txtPhoneNumber.getText().toString().trim();
+            String uPassword = txtPassword.getText().toString().trim();
+            String uRetypePassword = txtRetypePassword.getText().toString().trim();
 
-                uUsername = String.valueOf(txtUsername.getText());
-                uEmail = String.valueOf(txtEmail.getText());
-                uPhoneNumber = String.valueOf(txtPhoneNumber.getText());
-                uPassword = String.valueOf(txtPassword.getText());
-                uRetypePassword = String.valueOf(txtRetypePassword.getText());
-
-                if (TextUtils.isEmpty(uUsername)){
-                    Toast.makeText(signUp.this,"Enter Username",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(uEmail)){
-                    Toast.makeText(signUp.this,"Enter Email",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(uPhoneNumber)){
-                    Toast.makeText(signUp.this,"Enter Phonenumber",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (!uPassword.equals(uRetypePassword)){
-                    Toast.makeText(signUp.this,"Password doesn't match",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                mAuth.createUserWithEmailAndPassword(uEmail, uPassword)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    FirebaseUser user = mAuth.getCurrentUser();
-
-                                    Map<String, Object> userData = new HashMap<>();
-                                    userData.put("username", uUsername);
-                                    userData.put("email", uEmail);
-                                    userData.put("phonenumber", uPhoneNumber);
-                                    userData.put("password", uPassword);
-
-                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                    db.collection("users").document(user.getUid())
-                                            .set(userData)
-                                            .addOnSuccessListener(aVoid -> {
-                                                Toast.makeText(signUp.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
-                                                Intent signUpIntent = new Intent(getApplicationContext(), loginActivity.class);
-                                                startActivity(signUpIntent);
-                                                finish();
-                                            })
-                                            .addOnFailureListener(e -> {
-                                                Toast.makeText(signUp.this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                user.delete();
-                                            });
-                                } else {
-                                    String errorMessage = task.getException().getMessage();
-                                    Toast.makeText(signUp.this, "Account Creation Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+            if (TextUtils.isEmpty(uUsername)) {
+                Toast.makeText(this, "Enter Username", Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
 
+            if (TextUtils.isEmpty(uEmail)) {
+                Toast.makeText(this, "Enter Email", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(uPhoneNumber)) {
+                Toast.makeText(this, "Enter Phonenumber", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!uPassword.equals(uRetypePassword)) {
+                Toast.makeText(this, "Password doesn't match", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            mAuth.createUserWithEmailAndPassword(uEmail, uPassword)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            // Save email to SharedPreferences
+                            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString(KEY_EMAIL, uEmail);
+                            editor.putBoolean(KEY_IS_LOGGED_IN, false); // User must log in
+                            editor.apply();
+
+                            // Save user data to Firestore
+                            Map<String, Object> userData = new HashMap<>();
+                            userData.put("username", uUsername);
+                            userData.put("email", uEmail);
+                            userData.put("phonenumber", uPhoneNumber);
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("users").document(user.getUid())
+                                    .set(userData)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d(TAG, "User data saved successfully for UID: " + user.getUid());
+                                        Toast.makeText(this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e(TAG, "Failed to save user data", e);
+                                        Toast.makeText(this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        // Do not delete user; allow login
+                                    });
+
+                            // Navigate to LoginActivity regardless of Firestore outcome
+                            Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Log.e(TAG, "Account creation failed", task.getException());
+                            String errorMessage = task.getException().getMessage();
+                            Toast.makeText(this, "Account Creation Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
     }
 }
