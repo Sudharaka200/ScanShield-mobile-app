@@ -24,7 +24,6 @@ public class settings extends Activity {
                     startActivity(new Intent(settings.this, home.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_settings) {
-                    startActivity(new Intent(settings.this, settings.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_profile) {
                     startActivity(new Intent(settings.this, profile.class));
@@ -34,6 +33,6 @@ public class settings extends Activity {
                 }
             }
         });
-
+        bottomNavigationView.setSelectedItemId(R.id.nav_settings);
     }
 }

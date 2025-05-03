@@ -8,9 +8,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,7 +36,7 @@ public class login_successfully extends AppCompatActivity {
         user = mAuth.getCurrentUser();
 
         if (user == null){
-            Intent loginIntent = new Intent(getApplicationContext(), login.class);
+            Intent loginIntent = new Intent(getApplicationContext(), loginActivity.class);
             startActivity(loginIntent);
             finish();
         }
