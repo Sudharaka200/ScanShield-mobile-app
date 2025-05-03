@@ -60,7 +60,7 @@
         <!-- android:name=".registration" -->
         <!-- android:exported="false" /> -->
         <activity
-            android:name=".login"
+            android:name=".loginActivity"
             android:exported="false" />
         <activity
             android:name=".dialpad"
