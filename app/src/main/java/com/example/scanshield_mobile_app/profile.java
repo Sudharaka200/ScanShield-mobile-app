@@ -1,6 +1,8 @@
 package com.example.scanshield_mobile_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -40,6 +42,69 @@ public class profile extends AppCompatActivity {
         // Set user email in TextView
         TextView emailTextView = findViewById(R.id.logedUserEmailProfile);
         emailTextView.setText(currentUser.getEmail());
+
+        // Initialize CardView items
+        TextView personalInfo = findViewById(R.id.textView12);
+        TextView settings = findViewById(R.id.textView13);
+        TextView spamCalls = findViewById(R.id.textView14);
+        TextView spamMessages = findViewById(R.id.textView17);
+        TextView contactUs = findViewById(R.id.textView16);
+        TextView privacyPolicy = findViewById(R.id.textView18);
+        TextView aboutUs = findViewById(R.id.textView19);
+
+        // Set click listeners for CardView items
+
+        //personal info
+//        personalInfo.setOnClickListener(v -> {
+//            Toast.makeText(this,)", Toast.LENGTH_SHORT).show();
+//        });
+
+        //settings
+        settings.setOnClickListener(v -> {
+            Intent intent = new Intent(this, settings.class);
+            startActivity(intent);
+        });
+
+        //spam calls
+        spamCalls.setOnClickListener(v -> {
+            Intent intent = new Intent(this, call_history.class);
+            startActivity(intent);
+        });
+
+        //spam messages
+        spamMessages.setOnClickListener(v -> {
+            Intent intent = new Intent(this, spam_messages.class);
+            startActivity(intent);
+        });
+
+        //contact us
+//        contactUs.setOnClickListener(v -> {
+//            Intent intent = new Intent(this, contact_us.class);
+//            startActivity(intent);
+//        });
+
+        //privacy policy
+        privacyPolicy.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Privacy Policy")
+                    .setMessage("Our Privacy Policy ensures your data is protected." +
+                            "We collect minimal personal information (e.g., email, username) to provide a secure experience." +
+                            "Data is stored securely in Firebase and not shared with third parties without consent.")
+                    .setPositiveButton("OK", null)
+                    .setCancelable(true)
+                    .show();
+        });
+
+        //about us
+        aboutUs.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("About Us")
+                    .setMessage("ScanShield is dedicated to protecting users from spam calls and messages." +
+                            "Our app leverages advanced technology to provide a secure and user-friendly experience.")
+                    .setPositiveButton("OK", null)
+                    .setCancelable(true)
+                    .show();
+        });
 
         // Initialize Logout Button
         Button logoutButton = findViewById(R.id.btn_Wlogout); // Corrected to match profile_layout.xml

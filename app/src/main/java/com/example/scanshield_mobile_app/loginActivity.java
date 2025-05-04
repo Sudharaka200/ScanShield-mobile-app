@@ -2,6 +2,7 @@ package com.example.scanshield_mobile_app;
 
 import static android.content.ContentValues.TAG;
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -82,13 +84,32 @@ public class loginActivity extends AppCompatActivity {
                             editor.putBoolean(KEY_IS_LOGGED_IN, true);
                             editor.apply();
 
+                            new AlertDialog.Builder(this)
+                                    .setTitle("Login Successful")
+                                    .setMessage("You have logged in successfully.")
+                                    .setPositiveButton("OK", (dialog, which) -> {
+                                        Intent intent = new Intent(getApplicationContext(), home.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .setCancelable(false)
+                                    .show();
+
                             Intent intent = new Intent(getApplicationContext(), login_successfully.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                             finish();
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            String errorMessage = task.getException().getMessage();
+                            // Show error dialog
+                            new AlertDialog.Builder(this)
+                                    .setTitle("Login Failed")
+                                    .setMessage("Authentication failed: " + errorMessage)
+                                    .setPositiveButton("OK", null)
+                                    .setCancelable(true)
+                                    .show();
                         }
                     });
         });
