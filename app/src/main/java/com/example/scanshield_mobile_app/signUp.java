@@ -1,5 +1,6 @@
 package com.example.scanshield_mobile_app;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -106,12 +108,35 @@ public class signUp extends AppCompatActivity {
                                     .set(userData)
                                     .addOnSuccessListener(aVoid -> {
                                         Log.d(TAG, "User data saved successfully for UID: " + user.getUid());
-                                        Toast.makeText(this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
+                                        // Show success dialog
+                                        new AlertDialog.Builder(this)
+                                                .setTitle("Signup Successful")
+                                                .setMessage("Your account has been created successfully. Please log in to continue.")
+                                                .setPositiveButton("OK", (dialog, which) -> {
+                                                    Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    finish();
+                                                })
+                                                .setCancelable(false)
+                                                .show();
                                     })
                                     .addOnFailureListener(e -> {
                                         Log.e(TAG, "Failed to save user data", e);
                                         Toast.makeText(this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         // Do not delete user; allow login
+                                        // Navigate to LoginActivity even if Firestore fails
+                                        new AlertDialog.Builder(this)
+                                                .setTitle("Signup Successful")
+                                                .setMessage("Your account has been created, but user data could not be saved. Please log in to continue.")
+                                                .setPositiveButton("OK", (dialog, which) -> {
+                                                    Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    finish();
+                                                })
+                                                .setCancelable(false)
+                                                .show();
                                     });
 
                             // Navigate to LoginActivity regardless of Firestore outcome

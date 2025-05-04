@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F1F1F1"
-    tools:context=".MainActivity">
+    tools:context=".profile">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                     android:src="@drawable/female_profile" />
             </LinearLayout>
 
-            <!-- Call History Section -->
+            <!-- Profile Section -->
             <TextView
                 android:id="@+id/textView15"
                 android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!-- Call History Items -->
+                    <!-- Personal Info -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -120,6 +120,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Settings -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -148,6 +149,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Spam Call Messages -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -171,11 +173,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Spam Call  Messages" />
+                                android:text="Spam Calls" />
 
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- About Us -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -192,18 +195,19 @@
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:layout_marginRight="60dp"
-                                android:src="@drawable/more_info" />
+                                android:src="@drawable/spam_messages" />
 
                             <TextView
                                 android:id="@+id/textView17"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="About Us" />
+                                android:text="Spam Messages" />
 
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Contact Us -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -231,9 +235,69 @@
 
                         </LinearLayout>
                     </LinearLayout>
+
+                    <!-- Privacy Policy -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:layout_marginBottom="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_marginRight="60dp"
+                                android:src="@drawable/privacy_policy" />
+
+                            <TextView
+                                android:id="@+id/textView18"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Privacy Policy" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- About -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:layout_marginBottom="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_marginRight="60dp"
+                                android:src="@drawable/more_info" />
+
+                            <TextView
+                                android:id="@+id/textView19"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="About Us" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
             <Button
                 android:id="@+id/btn_Wlogout"
                 android:layout_width="280dp"
@@ -241,15 +305,11 @@
                 android:text="Logout"
                 android:background="@drawable/rounded_button4"
                 android:textColor="#FFF"
-
                 android:layout_gravity="center" />
 
         </LinearLayout>
 
-
-
     </ScrollView>
-
 
     <!-- Bottom Navigation Menu -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -260,10 +320,6 @@
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:itemIconSize="24dp"
-        app:elevation="8dp">
-
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
+        app:elevation="8dp" />
 
 </LinearLayout>
