@@ -5,15 +5,17 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
-public class blocked_numbers extends AppCompatActivity {
+public class spam_calls extends AppCompatActivity {
 
     FirebaseAuth mAuth;
-    TextView lUser;
+    TextView logedUser;
     FirebaseUser user;
 
     @Override
@@ -24,22 +26,17 @@ public class blocked_numbers extends AppCompatActivity {
 
         userCheck();
 
-
     }
 
     public void userCheck(){
         mAuth = FirebaseAuth.getInstance();
-        lUser = findViewById(R.id.logUserEmailBlockedCalls);
+        logedUser = findViewById(R.id.logUserEmailBlockedCalls);
         user = mAuth.getCurrentUser();
 
         if (user == null){
 
-        }
-        else {
-            lUser.setText(user.getEmail());
+        }else {
+            logedUser.setText(user.getEmail());
         }
     }
-
-
-
 }

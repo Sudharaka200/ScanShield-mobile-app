@@ -74,9 +74,9 @@
         <activity
             android:name=".call_history"
             android:exported="false" />
-<!-- <activity -->
-        <!-- android:name=".login" -->
-        <!-- android:exported="false" /> -->
+        <activity
+         android:name=".spam_calls"
+         android:exported="false" />
         <activity
             android:name=".get_started3"
             android:exported="false" />

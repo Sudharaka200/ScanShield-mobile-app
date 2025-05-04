@@ -67,7 +67,7 @@ public class profile extends AppCompatActivity {
 
         //spam calls
         spamCalls.setOnClickListener(v -> {
-            Intent intent = new Intent(this, call_history.class);
+            Intent intent = new Intent(this, spam_calls.class);
             startActivity(intent);
         });
 

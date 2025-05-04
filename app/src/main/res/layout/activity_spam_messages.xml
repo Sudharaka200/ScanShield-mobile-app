@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Spam"
+                android:text="Spam messages"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
