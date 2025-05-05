@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+
 
     <application
         android:allowBackup="true"
@@ -35,6 +37,11 @@
         <activity
             android:name=".profile"
             android:exported="false" />
+
+        <activity android:name=".call_history" />
+
+
+
 
         <activity
             android:name=".signUp"
@@ -71,9 +78,7 @@
         <activity
             android:name=".blocked_numbers"
             android:exported="false" />
-        <activity
-            android:name=".call_history"
-            android:exported="false" />
+
         <activity
          android:name=".spam_calls"
          android:exported="false" />
