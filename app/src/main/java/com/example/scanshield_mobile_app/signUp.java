@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,15 +97,15 @@ public class signUp extends AppCompatActivity {
                             editor.putBoolean(KEY_IS_LOGGED_IN, false); // User must log in
                             editor.apply();
 
-                            // Save user data to Firestore
+                            // Save user data to Realtime Database
                             Map<String, Object> userData = new HashMap<>();
                             userData.put("username", uUsername);
                             userData.put("email", uEmail);
                             userData.put("phonenumber", uPhoneNumber);
+                            userData.put("createdAt", System.currentTimeMillis());
 
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("users").document(user.getUid())
-                                    .set(userData)
+                            DatabaseReference db = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+                            db.setValue(userData)
                                     .addOnSuccessListener(aVoid -> {
                                         Log.d(TAG, "User data saved successfully for UID: " + user.getUid());
                                         // Show success dialog
@@ -124,8 +124,7 @@ public class signUp extends AppCompatActivity {
                                     .addOnFailureListener(e -> {
                                         Log.e(TAG, "Failed to save user data", e);
                                         Toast.makeText(this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        // Do not delete user; allow login
-                                        // Navigate to LoginActivity even if Firestore fails
+                                        // Navigate to LoginActivity even if database fails
                                         new AlertDialog.Builder(this)
                                                 .setTitle("Signup Successful")
                                                 .setMessage("Your account has been created, but user data could not be saved. Please log in to continue.")
@@ -138,15 +137,9 @@ public class signUp extends AppCompatActivity {
                                                 .setCancelable(false)
                                                 .show();
                                     });
-
-                            // Navigate to LoginActivity regardless of Firestore outcome
-                            Intent intent = new Intent(getApplicationContext(), loginActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
                         } else {
                             Log.e(TAG, "Account creation failed", task.getException());
-                            String errorMessage = task.getException().getMessage();
+                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
                             Toast.makeText(this, "Account Creation Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
                         }
                     });

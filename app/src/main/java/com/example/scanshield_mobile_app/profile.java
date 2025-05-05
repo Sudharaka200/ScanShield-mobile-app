@@ -88,7 +88,7 @@ public class profile extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Privacy Policy")
                     .setMessage("Our Privacy Policy ensures your data is protected." +
-                            "We collect minimal personal information (e.g., email, username) to provide a secure experience." +
+                            "We collect minimal personal information info@scanshield.lk to provide a secure experience." +
                             "Data is stored securely in Firebase and not shared with third parties without consent.")
                     .setPositiveButton("OK", null)
                     .setCancelable(true)
