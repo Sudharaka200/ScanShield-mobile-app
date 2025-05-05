@@ -40,11 +40,11 @@ android {
 }
 
 dependencies {
-    // AndroidX & Material
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
+    // AndroidX & Material Design
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.activity:activity:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.cardview:cardview:1.0.0")
 
@@ -54,7 +54,8 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
 
     // TensorFlow Lite
-    implementation(libs.tensorflow.lite.support)
+    implementation("org.tensorflow:tensorflow-lite:2.13.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.3.1")
     implementation(libs.tensorflow.lite.metadata)
 
     // Google Play Services
@@ -67,16 +68,3 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
-
-
-
-    implementation ("androidx.appcompat:appcompat:1.7.0")
-    implementation ("com.google.android.material:material:1.12.0")
-
-
-    implementation ("org.tensorflow:tensorflow-lite:2.13.0")
-    implementation ("org.tensorflow:tensorflow-lite-support:0.3.1")
-
-
-}
-
