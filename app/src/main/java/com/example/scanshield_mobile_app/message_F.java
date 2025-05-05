@@ -4,15 +4,17 @@ public class message_F {
     private String email;
     private String phoneNumber;
     private String Message;
+    private String status;
     private String DateTime;
 
     public message_F(){
     }
 
-    public message_F(String email, String message, String phoneNumber, String dateTime) {
+    public message_F(String email, String phoneNumber, String message, String status, String dateTime) {
         this.email = email;
-        Message = message;
         this.phoneNumber = phoneNumber;
+        Message = message;
+        this.status = status;
         DateTime = dateTime;
     }
 
@@ -38,6 +40,14 @@ public class message_F {
 
     public void setMessage(String message) {
         Message = message;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getDateTime() {
