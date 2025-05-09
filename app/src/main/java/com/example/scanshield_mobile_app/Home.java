@@ -196,7 +196,7 @@ public class Home extends AppCompatActivity {
         buttonMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent messageIntent = new Intent(getApplicationContext(), message_history_test.class);
+                Intent messageIntent = new Intent(getApplicationContext(), message_history.class);
                 startActivity(messageIntent);
             }
         });

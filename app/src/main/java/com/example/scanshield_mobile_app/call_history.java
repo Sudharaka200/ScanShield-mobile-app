@@ -33,6 +33,14 @@ public class call_history extends AppCompatActivity {
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Prevent any item from being pre-selected
+        bottomNavigationView.getMenu().setGroupCheckable(0, true, false);
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            bottomNavigationView.getMenu().getItem(i).setChecked(false);
+        }
+
+        // Set the item selected listener
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -45,9 +53,8 @@ public class call_history extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.nav_profile) {
                     startActivity(new Intent(call_history.this, profile.class));
                     return true;
-                } else {
-                    return false;
                 }
+                return false;
             }
         });
 

@@ -84,17 +84,17 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putBoolean(KEY_IS_LOGGED_IN, true);
                             editor.apply();
 
-                            new AlertDialog.Builder(this)
-                                    .setTitle("Login Successful")
-                                    .setMessage("You have logged in successfully.")
-                                    .setPositiveButton("OK", (dialog, which) -> {
-                                        Intent intent = new Intent(getApplicationContext(), Home.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                    })
-                                    .setCancelable(false)
-                                    .show();
+//                            new AlertDialog.Builder(this)
+//                                    .setTitle("Login Successful")
+//                                    .setMessage("You have logged in successfully.")
+//                                    .setPositiveButton("OK", (dialog, which) -> {
+//                                        Intent intent = new Intent(getApplicationContext(), Home.class);
+//                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    })
+//                                    .setCancelable(false)
+//                                    .show();
 
                             Intent intent = new Intent(getApplicationContext(), login_successfully.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

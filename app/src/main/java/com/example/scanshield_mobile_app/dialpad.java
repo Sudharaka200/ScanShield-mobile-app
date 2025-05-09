@@ -34,6 +34,31 @@ public class dialpad extends AppCompatActivity {
         dialPadButtons();
         userCheck();
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Prevent any item from being pre-selected
+        bottomNavigationView.getMenu().setGroupCheckable(0, true, false);
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            bottomNavigationView.getMenu().getItem(i).setChecked(false);
+        }
+
+        // Set the item selected listener
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_home) {
+                    startActivity(new Intent(dialpad.this, Home.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_settings) {
+                    startActivity(new Intent(dialpad.this, SettingsActivity.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_profile) {
+                    startActivity(new Intent(dialpad.this, profile.class));
+                    return true;
+                }
+                return false;
+            }
+        });
 
     }
 
@@ -164,26 +189,5 @@ public class dialpad extends AppCompatActivity {
                 numberDisplay.setText(numberBuilder.toString());
             }
         });
-
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.nav_home) {
-                    startActivity(new Intent(dialpad.this, Home.class));
-                    return true;
-                } else if (item.getItemId() == R.id.nav_settings) {
-                    startActivity(new Intent(dialpad.this, SettingsActivity.class));
-                    return true;
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    startActivity(new Intent(dialpad.this, profile.class));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
     }
 }
