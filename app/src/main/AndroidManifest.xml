@@ -34,7 +34,7 @@
             android:name=".SignUp"
             android:exported="false" />
         <activity
-            android:name=".message_history_test"
+            android:name=".message_history"
             android:exported="false" />
         <activity
             android:name=".normal_calls"

@@ -32,8 +32,17 @@ public class number_search extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_number_search);
 
+        userCheck();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Prevent any item from being pre-selected
+        bottomNavigationView.getMenu().setGroupCheckable(0, true, false);
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            bottomNavigationView.getMenu().getItem(i).setChecked(false);
+        }
+
+        // Set the item selected listener
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -46,14 +55,10 @@ public class number_search extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.nav_profile) {
                     startActivity(new Intent(number_search.this, profile.class));
                     return true;
-                } else {
-                    return false;
                 }
+                return false;
             }
         });
-
-        userCheck();
-
     }
 
     public void userCheck(){
