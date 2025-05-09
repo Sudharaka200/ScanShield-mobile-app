@@ -32,7 +32,7 @@ public class profile extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (!prefs.getBoolean(KEY_IS_LOGGED_IN, false) || currentUser == null) {
             Log.d("SessionCheck", "Redirecting to LoginActivity: isLoggedIn=" + prefs.getBoolean(KEY_IS_LOGGED_IN, false) + ", currentUser=" + (currentUser == null));
-            Intent intent = new Intent(this, loginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
@@ -61,7 +61,7 @@ public class profile extends AppCompatActivity {
 
         //settings
         settings.setOnClickListener(v -> {
-            Intent intent = new Intent(this, settings.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         });
 
@@ -119,7 +119,7 @@ public class profile extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
 
             // Navigate to LoginActivity and clear back stack
-            Intent intent = new Intent(profile.this, loginActivity.class);
+            Intent intent = new Intent(profile.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
@@ -131,10 +131,10 @@ public class profile extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_home) {
-                    startActivity(new Intent(profile.this, home.class));
+                    startActivity(new Intent(profile.this, Home.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_settings) {
-                    startActivity(new Intent(profile.this, settings.class));
+                    startActivity(new Intent(profile.this, SettingsActivity.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_profile) {
                     return true; // Already on profile

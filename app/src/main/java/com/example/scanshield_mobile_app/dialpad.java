@@ -10,9 +10,6 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -174,10 +171,10 @@ public class dialpad extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_home) {
-                    startActivity(new Intent(dialpad.this, home.class));
+                    startActivity(new Intent(dialpad.this, Home.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_settings) {
-                    startActivity(new Intent(dialpad.this, settings.class));
+                    startActivity(new Intent(dialpad.this, SettingsActivity.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_profile) {
                     startActivity(new Intent(dialpad.this, profile.class));

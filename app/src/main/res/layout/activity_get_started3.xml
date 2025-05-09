@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".get_started_1">
+    tools:context=".GetStarted1">
 
     <ImageView
         android:id="@+id/imageView4"
@@ -90,10 +90,10 @@
         android:id="@+id/btnNext2"
         android:layout_width="381dp"
         android:layout_height="46dp"
-        android:text="Get Started"
-        android:textColor="#FFF"
         android:background="@drawable/rounded_button"
+        android:text="Login"
         android:textAllCaps="false"
+        android:textColor="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
