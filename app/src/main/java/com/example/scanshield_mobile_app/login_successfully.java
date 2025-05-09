@@ -36,7 +36,7 @@ public class login_successfully extends AppCompatActivity {
         user = mAuth.getCurrentUser();
 
         if (user == null){
-            Intent loginIntent = new Intent(getApplicationContext(), loginActivity.class);
+            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(loginIntent);
             finish();
         }
@@ -52,7 +52,7 @@ public class login_successfully extends AppCompatActivity {
         buttonHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentBtnHome =  new Intent(getApplicationContext(), home.class);
+                Intent intentBtnHome =  new Intent(getApplicationContext(), Home.class);
                 startActivity(intentBtnHome);
             }
         });

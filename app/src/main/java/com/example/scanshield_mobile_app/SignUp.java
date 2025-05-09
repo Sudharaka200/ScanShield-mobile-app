@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class signUp extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
 
     private static final String PREFS_NAME = "UserPrefs";
     private static final String KEY_EMAIL = "userEmail";
@@ -38,7 +38,7 @@ public class signUp extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         if (currentUser != null && prefs.getBoolean(KEY_IS_LOGGED_IN, false)) {
-            Intent intent = new Intent(getApplicationContext(), home.class);
+            Intent intent = new Intent(getApplicationContext(), Home.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
@@ -113,7 +113,7 @@ public class signUp extends AppCompatActivity {
                                                 .setTitle("Signup Successful")
                                                 .setMessage("Your account has been created successfully. Please log in to continue.")
                                                 .setPositiveButton("OK", (dialog, which) -> {
-                                                    Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     startActivity(intent);
                                                     finish();
@@ -129,7 +129,7 @@ public class signUp extends AppCompatActivity {
                                                 .setTitle("Signup Successful")
                                                 .setMessage("Your account has been created, but user data could not be saved. Please log in to continue.")
                                                 .setPositiveButton("OK", (dialog, which) -> {
-                                                    Intent intent = new Intent(getApplicationContext(), loginActivity.class);
+                                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     startActivity(intent);
                                                     finish();

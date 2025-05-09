@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class settings extends Activity {
+public class SettingsActivity extends Activity {
 
     private static final String PREFS_NAME = "UserPrefs";
     private static final String KEY_EMAIL = "userEmail";
@@ -42,7 +42,7 @@ public class settings extends Activity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (!prefs.getBoolean(KEY_IS_LOGGED_IN, false) || currentUser == null) {
             Log.d(TAG, "Redirecting to LoginActivity: isLoggedIn=" + prefs.getBoolean(KEY_IS_LOGGED_IN, false) + ", currentUser=" + (currentUser == null));
-            Intent intent = new Intent(this, loginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
@@ -133,12 +133,12 @@ public class settings extends Activity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_home) {
-                    startActivity(new Intent(settings.this, home.class));
+                    startActivity(new Intent(SettingsActivity.this, Home.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_settings) {
                     return true;
                 } else if (item.getItemId() == R.id.nav_profile) {
-                    startActivity(new Intent(settings.this, profile.class));
+                    startActivity(new Intent(SettingsActivity.this, profile.class));
                     return true;
                 } else {
                     return false;
@@ -184,7 +184,7 @@ public class settings extends Activity {
                                 .setTitle("Account Deleted")
                                 .setMessage("Your account has been successfully deleted.")
                                 .setPositiveButton("OK", (d, w) -> {
-                                    Intent intent = new Intent(this, loginActivity.class);
+                                    Intent intent = new Intent(this, LoginActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                     finish();
