@@ -186,7 +186,7 @@ public class Home extends AppCompatActivity {
         buttonCalls.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent callsIntent =  new Intent(getApplicationContext(), call_history.class);
+                Intent callsIntent =  new Intent(getApplicationContext(), CallHistoryActivity.class);
                 startActivity(callsIntent);
             }
         });
