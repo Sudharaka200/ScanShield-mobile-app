@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+    id("org.jetbrains.kotlin.android") version "1.9.24"
 }
 
 android {
@@ -26,50 +27,44 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         mlModelBinding = true
+        viewBinding = true
     }
 }
 
 dependencies {
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
+    // AndroidX & Material Design
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.activity:activity:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.cardview:cardview:1.0.0")
 
-    // Firebase BoM ensures all Firebase libraries use compatible versions
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-
-    // Add Firebase libraries WITHOUT versions
+    // Firebase (using BoM)
+    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
-    implementation("com.google.firebase:firebase-firestore")
 
-    implementation(libs.tensorflow.lite.support)
+    // TensorFlow Lite
+    implementation("org.tensorflow:tensorflow-lite:2.13.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.3.1")
     implementation(libs.tensorflow.lite.metadata)
 
-    implementation(libs.cardview)
-
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-
+    // Google Play Services
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.gms:play-services-base:18.5.0")
 
-
-
-    implementation ("androidx.appcompat:appcompat:1.7.0")
-    implementation ("com.google.android.material:material:1.12.0")
-
-
-    implementation ("org.tensorflow:tensorflow-lite:2.13.0")
-    implementation ("org.tensorflow:tensorflow-lite-support:0.3.1")
-
-
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }

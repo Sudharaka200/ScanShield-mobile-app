@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class loginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "UserPrefs";
     private static final String KEY_EMAIL = "userEmail";
@@ -36,7 +36,7 @@ public class loginActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && prefs.getBoolean(KEY_IS_LOGGED_IN, false)) {
-            Intent intent = new Intent(getApplicationContext(), home.class);
+            Intent intent = new Intent(getApplicationContext(), Home.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
@@ -84,17 +84,17 @@ public class loginActivity extends AppCompatActivity {
                             editor.putBoolean(KEY_IS_LOGGED_IN, true);
                             editor.apply();
 
-                            new AlertDialog.Builder(this)
-                                    .setTitle("Login Successful")
-                                    .setMessage("You have logged in successfully.")
-                                    .setPositiveButton("OK", (dialog, which) -> {
-                                        Intent intent = new Intent(getApplicationContext(), home.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                    })
-                                    .setCancelable(false)
-                                    .show();
+//                            new AlertDialog.Builder(this)
+//                                    .setTitle("Login Successful")
+//                                    .setMessage("You have logged in successfully.")
+//                                    .setPositiveButton("OK", (dialog, which) -> {
+//                                        Intent intent = new Intent(getApplicationContext(), Home.class);
+//                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    })
+//                                    .setCancelable(false)
+//                                    .show();
 
                             Intent intent = new Intent(getApplicationContext(), login_successfully.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -117,7 +117,7 @@ public class loginActivity extends AppCompatActivity {
         // Handle signup navigation
         TextView buttonSignUp = findViewById(R.id.signup_txt);
         buttonSignUp.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), signUp.class);
+            Intent intent = new Intent(getApplicationContext(), SignUp.class);
             startActivity(intent);
         });
     }

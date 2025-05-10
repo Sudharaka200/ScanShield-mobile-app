@@ -30,7 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class home extends AppCompatActivity {
+public class Home extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
@@ -64,7 +64,7 @@ public class home extends AppCompatActivity {
         userCheck();
 
         // SMS Permission
-        ActivityCompat.requestPermissions(home.this, new String[]{Manifest.permission.READ_SMS}, 1);
+        ActivityCompat.requestPermissions(Home.this, new String[]{Manifest.permission.READ_SMS}, 1);
 
         // Firebase setup
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -75,13 +75,13 @@ public class home extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_home) {
-                    startActivity(new Intent(home.this, home.class));
+                    startActivity(new Intent(Home.this, Home.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_settings) {
-                    startActivity(new Intent(home.this, settings.class));
+                    startActivity(new Intent(Home.this, SettingsActivity.class));
                     return true;
                 } else if (item.getItemId() == R.id.nav_profile) {
-                    startActivity(new Intent(home.this, profile.class));
+                    startActivity(new Intent(Home.this, profile.class));
                     return true;
                 } else {
                     return false;
@@ -93,7 +93,7 @@ public class home extends AppCompatActivity {
 
     private void addDataToFirebase(String phoneNumber, String message) {
         if (user == null) {
-            Toast.makeText(home.this, "User not logged in. Cannot save data.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Home.this, "User not logged in. Cannot save data.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -108,9 +108,9 @@ public class home extends AppCompatActivity {
 
         databaseReference.push().setValue(message_f)
                 .addOnSuccessListener(aVoid ->
-                        Toast.makeText(home.this, "Data added successfully!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(Home.this, "Data added successfully!", Toast.LENGTH_SHORT).show()
                 ).addOnFailureListener(e ->
-                        Toast.makeText(home.this, "Failed to add data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(Home.this, "Failed to add data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                 );
     }
 
@@ -151,7 +151,7 @@ public class home extends AppCompatActivity {
         user = mAuth.getCurrentUser();
 
         if (user == null){
-            Intent loginIntent = new Intent(getApplicationContext(), loginActivity.class);
+            Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(loginIntent);
             finish();
         }
@@ -196,7 +196,7 @@ public class home extends AppCompatActivity {
         buttonMessages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent messageIntent = new Intent(getApplicationContext(), message_history_test.class);
+                Intent messageIntent = new Intent(getApplicationContext(), message_history.class);
                 startActivity(messageIntent);
             }
         });
@@ -226,7 +226,7 @@ public class home extends AppCompatActivity {
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent settingsIntent = new Intent(getApplicationContext(), settings.class);
+                Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(settingsIntent);
             }
         });
