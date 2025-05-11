@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,6 +58,14 @@ public class SignUp extends AppCompatActivity {
         txtPassword = findViewById(R.id.passwordSignup);
         txtRetypePassword = findViewById(R.id.retypePasswordSignup);
         buttonSignUp = findViewById(R.id.btn_signup);
+        TextView loginTextView = findViewById(R.id.login_txt3);
+
+        // Set click listener
+        loginTextView.setOnClickListener(v -> {
+            // Start LoginActivity
+            Intent intent = new Intent(SignUp.this, LoginActivity.class);
+            startActivity(intent);
+        });
 
         buttonSignUp.setOnClickListener(v -> {
             String uUsername = txtUsername.getText().toString().trim();

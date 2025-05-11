@@ -5,7 +5,6 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,6 +20,7 @@
         android:theme="@style/Theme.ScanShieldmobileapp"
         tools:targetApi="31">
 
+        <!-- Existing activities -->
         <activity
             android:name=".Home"
             android:exported="false" />
@@ -89,11 +89,14 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <activity
+            android:name=".ContactUs"
+            android:exported="false" />
         <receiver
             android:name=".Reciver"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.Broacast" />
+                <action android:name="com.example.Broadcast" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>

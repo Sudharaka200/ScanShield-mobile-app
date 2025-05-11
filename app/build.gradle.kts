@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
-    id("org.jetbrains.kotlin.android") version "1.9.24"
+    id("org.jetbrains.kotlin.android") version "2.0.20"
 }
 
 android {
@@ -36,6 +36,9 @@ android {
     buildFeatures {
         mlModelBinding = true
         viewBinding = true
+    }
+    aaptOptions {
+        noCompress.clear()
     }
 }
 

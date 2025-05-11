@@ -1,5 +1,7 @@
 package com.example.scanshield_mobile_app;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -78,10 +80,10 @@ public class profile extends AppCompatActivity {
         });
 
         //contact us
-//        contactUs.setOnClickListener(v -> {
-//            Intent intent = new Intent(this, contact_us.class);
-//            startActivity(intent);
-//        });
+        contactUs.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ContactUs.class);
+            startActivity(intent);
+        });
 
         //privacy policy
         privacyPolicy.setOnClickListener(v -> {
