@@ -12,10 +12,11 @@ public class IncomingCall extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_incoming_call);
+        setContentView(R.layout.incoming_call_activity);
 
-        numberTextView = findViewById(R.id.textPhoneNumber);
-        statusTextView = findViewById(R.id.textStatus);
+        numberTextView = findViewById(R.id.caller_number);
+        statusTextView = findViewById(R.id.caller_status);
+
 
         String incomingNumber = getIntent().getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         numberTextView.setText("Number: " + incomingNumber);

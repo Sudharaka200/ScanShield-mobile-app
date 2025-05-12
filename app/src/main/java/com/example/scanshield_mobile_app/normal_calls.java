@@ -11,7 +11,7 @@ public class normal_calls extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_incoming_call);
+        setContentView(R.layout.incoming_call_activity);
 
     }
 }
