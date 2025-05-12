@@ -138,11 +138,7 @@ public class profile extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.nav_settings) {
                     startActivity(new Intent(profile.this, SettingsActivity.class));
                     return true;
-                } else if (item.getItemId() == R.id.nav_profile) {
-                    return true; // Already on profile
-                } else {
-                    return false;
-                }
+                } else return item.getItemId() == R.id.nav_profile; // Already on profile
             }
         });
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);

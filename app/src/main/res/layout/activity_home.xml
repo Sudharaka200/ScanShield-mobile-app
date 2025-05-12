@@ -382,7 +382,7 @@
                                 android:id="@+id/blockedtxt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Blocked"
+                                android:text="SpamCalls"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -415,7 +415,7 @@
                                 android:id="@+id/spamtxt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Spam"
+                                android:text="SpamSMS"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
                         </LinearLayout>

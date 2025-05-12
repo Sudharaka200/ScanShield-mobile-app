@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F1F1F1"
-    tools:context=".SettingsActivity">
+    tools:context=".DetectionTypes">
 
     <!-- Header Section -->
     <LinearLayout
@@ -29,11 +29,10 @@
                 android:id="@+id/LogUserEmailHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
+                android:text="Detection Types"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
         </LinearLayout>
 
     </LinearLayout>
@@ -81,11 +80,12 @@
                             android:gravity="center_vertical">
 
                             <TextView
-                                android:id="@+id/notifications"
+                                android:id="@+id/spam_call_blocking"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Notifications"
+                                android:text="Spam call blocking
+"
                                 android:textColor="#000000"
                                 android:textSize="16sp"
                                 android:clickable="true"
@@ -99,14 +99,13 @@
                                 android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
                                 <Switch
-                                    android:id="@+id/switch_notifications"
+                                    android:id="@+id/switch_calls"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </FrameLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Dark Mode -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -123,11 +122,11 @@
                             android:gravity="center_vertical">
 
                             <TextView
-                                android:id="@+id/dark_mode"
+                                android:id="@+id/spam_sms_blocking"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Dark Mode"
+                                android:text="Spam SMS blocking"
                                 android:textColor="#000000"
                                 android:textSize="16sp"
                                 android:clickable="true"
@@ -141,14 +140,13 @@
                                 android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
                                 <Switch
-                                    android:id="@+id/switch_darkmode"
+                                    android:id="@+id/switch_SMS"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content" />
                             </FrameLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Detection Types -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -165,73 +163,28 @@
                             android:gravity="center_vertical">
 
                             <TextView
-                                android:id="@+id/detection_types"
+                                android:id="@+id/spam_link_blocking"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Detection Types"
+                                android:text="Spam link blocking"
                                 android:textColor="#000000"
                                 android:textSize="16sp"
                                 android:clickable="true"
                                 android:focusable="true" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
 
-                    <!-- Blacklist Management -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#FFFFFF">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:id="@+id/blacklist_management"
-                                android:layout_width="0dp"
+                            <FrameLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Blacklist Management"
-                                android:textColor="#000000"
-                                android:textSize="16sp"
-                                android:clickable="true"
-                                android:focusable="true" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                                android:minWidth="48dp"
+                                android:minHeight="48dp"
+                                android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
-                    <!-- Delete Account -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#FFFFFF">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:id="@+id/delete_account"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Delete Account"
-                                android:textColor="#000000"
-                                android:textSize="16sp"
-                                android:clickable="true"
-                                android:focusable="true" />
+                                <Switch
+                                    android:id="@+id/switch_link"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </FrameLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 

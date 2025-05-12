@@ -59,22 +59,17 @@ public class SettingsActivity extends Activity {
         TextView blacklistManagement = findViewById(R.id.blacklist_management);
         TextView deleteAccount = findViewById(R.id.delete_account);
 
-        // Set click listeners for placeholder settings
-//        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            Toast.makeText(this, "Notifications " + (isChecked ? "enabled" : "disabled") + " (feature not implemented)", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            Toast.makeText(this, "Dark Mode " + (isChecked ? "enabled" : "disabled") + " (feature not implemented)", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        detectionTypes.setOnClickListener(v -> {
-//            Toast.makeText(this, "Detection Types clicked (feature not implemented)", Toast.LENGTH_SHORT).show();
-//        });
-//
-//        blacklistManagement.setOnClickListener(v -> {
-//            Toast.makeText(this, "Blacklist Management clicked (feature not implemented)", Toast.LENGTH_SHORT).show();
-//        });
+        detectionTypes.setOnClickListener(v -> {
+            Log.d(TAG, "Detection Types clicked, starting DetectionTypes");
+            Intent intent = new Intent(SettingsActivity.this, DetectionTypes.class);
+            startActivity(intent);
+        });
+
+        blacklistManagement.setOnClickListener(v -> {
+            Log.d(TAG, "Blacklist Management clicked, starting BlacklistManagement");
+            Intent intent = new Intent(SettingsActivity.this, blacklist_management.class);
+            startActivity(intent);
+        });
 
         // Delete Account functionality
         deleteAccount.setOnClickListener(v -> {

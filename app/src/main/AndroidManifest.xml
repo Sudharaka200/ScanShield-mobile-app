@@ -92,6 +92,12 @@
         <activity
             android:name=".ContactUs"
             android:exported="false" />
+        <activity
+            android:name=".DetectionTypes"
+            android:exported="false" />
+        <activity
+            android:name=".blacklist_management"
+            android:exported="false" />
         <receiver
             android:name=".Reciver"
             android:exported="true">
