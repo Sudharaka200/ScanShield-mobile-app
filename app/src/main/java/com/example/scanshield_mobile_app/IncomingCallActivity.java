@@ -1,99 +1,167 @@
 package com.example.scanshield_mobile_app;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.telecom.TelecomManager;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.core.app.ActivityCompat;
-
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class IncomingCallActivity extends Activity {
+@SuppressWarnings("deprecation")
+public class IncomingCallActivity extends AppCompatActivity {
 
-    private TextView numberView;
-    private TextView statusView;
+    private TextView callerNumberTextView;
+    private TextView callerStatusTextView;
+    private ImageView callerIconImageView;
     private Button answerButton;
     private Button rejectButton;
-    private TelephonyManager telephonyManager;
-    private PhoneStateListener phoneStateListener;
+    private Button markAsSpamButton;
+    private DatabaseReference databaseReference;
+    private String normalizedNumber;
+    private TelecomManager telecomManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.incoming_call_activity);
+        setContentView(R.layout.activity_incoming_call);
 
-        // Show over lock screen
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        // Set window flags to ensure full display over lock screen and other apps
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS); // Ensures full screen overlay
 
-        numberView = findViewById(R.id.caller_number);
-        statusView = findViewById(R.id.caller_status);
+        // Initialize TelecomManager
+        telecomManager = (TelecomManager) getSystemService(Context.TELECOM_SERVICE);
+
+        // Initialize UI components
+        callerNumberTextView = findViewById(R.id.caller_number);
+        callerStatusTextView = findViewById(R.id.caller_status);
+        callerIconImageView = findViewById(R.id.caller_icon);
         answerButton = findViewById(R.id.button_answer);
         rejectButton = findViewById(R.id.button_reject);
+        markAsSpamButton = findViewById(R.id.button_mark_as_spam);
 
-        String number = getIntent().getStringExtra("caller_number");
-        String status = getIntent().getStringExtra("caller_status");
-
-        if (number == null || number.isEmpty()) {
-            numberView.setText("Unknown Number");
-            statusView.setText("Status: unknown");
-            finish();
-            return;
+        // Get the incoming call number from the intent
+        Intent intent = getIntent();
+        String incomingNumber = intent.getStringExtra("incoming_number");
+        if (incomingNumber != null) {
+            callerNumberTextView.setText(incomingNumber);
+            normalizedNumber = normalizePhoneNumber(incomingNumber);
+            Log.d("IncomingCallActivity", "Incoming call from: " + incomingNumber + ", normalized: " + normalizedNumber);
+            checkNumberInFirebase(normalizedNumber);
+        } else {
+            callerNumberTextView.setText("Unknown Number");
+            callerStatusTextView.setText("Status: unknown");
         }
 
-        numberView.setText(number);
-        statusView.setText("Status: " + (status != null ? status : "unknown"));
-
-        // Answer button
+        // Set up button listeners
         answerButton.setOnClickListener(v -> {
-            TelecomManager telecomManager = (TelecomManager) getSystemService(TELECOM_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ANSWER_PHONE_CALLS) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                telecomManager.acceptRingingCall();
-                finish();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ANSWER_PHONE_CALLS}, 1);
-            }
+            Log.d("IncomingCallActivity", "Answer button clicked");
+            answerCall();
         });
 
-        // Reject button
         rejectButton.setOnClickListener(v -> {
-            TelecomManager telecomManager = (TelecomManager) getSystemService(TELECOM_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ANSWER_PHONE_CALLS) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                telecomManager.endCall();
-                finish();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ANSWER_PHONE_CALLS}, 1);
-            }
+            Log.d("IncomingCallActivity", "Reject button clicked");
+            rejectCall();
         });
 
-        // Listen for call state to dismiss UI
-        setupPhoneStateListener();
+        markAsSpamButton.setOnClickListener(v -> {
+            Log.d("IncomingCallActivity", "Mark as spam button clicked");
+            markAsSpam();
+        });
     }
 
-    private void setupPhoneStateListener() {
-        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        phoneStateListener = new PhoneStateListener() {
+    private String normalizePhoneNumber(String phoneNumber) {
+        String normalized = phoneNumber.replaceAll("[^0-9]", "");
+        normalized = normalized.substring(Math.max(0, normalized.length() - 10));
+        Log.d("IncomingCallActivity", "Final normalized number: " + normalized);
+        return normalized;
+    }
+
+    private void checkNumberInFirebase(String number) {
+        Log.d("IncomingCallActivity", "Checking Firebase for number: " + number);
+        databaseReference = FirebaseDatabase.getInstance().getReference("SpamNumbers").child(number).child("status");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onCallStateChanged(int state, String phoneNumber) {
-                if (state == TelephonyManager.CALL_STATE_IDLE || state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                    finish();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String status = dataSnapshot.getValue(String.class);
+                if (status != null) {
+                    callerStatusTextView.setText("Status: " + status);
+                    Log.d("IncomingCallActivity", "Spam status for " + number + ": " + status);
+                } else {
+                    callerStatusTextView.setText("Status: not found");
+                    Log.d("IncomingCallActivity", "No spam status found for " + number);
                 }
             }
-        };
-        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callerStatusTextView.setText("Status: error");
+                Log.e("IncomingCallActivity", "Firebase error: " + databaseError.getMessage());
+            }
+        });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (telephonyManager != null && phoneStateListener != null) {
-            telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+    private void answerCall() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                telecomManager.acceptRingingCall();
+                Log.d("IncomingCallActivity", "Call answered successfully");
+                Toast.makeText(this, "Call answered", Toast.LENGTH_SHORT).show();
+            } catch (SecurityException e) {
+                Log.e("IncomingCallActivity", "Permission ANSWER_PHONE_CALLS not granted", e);
+                Toast.makeText(this, "Permission to answer calls not granted", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Log.w("IncomingCallActivity", "Answering calls not supported on this API level");
+            Toast.makeText(this, "Answering calls not supported on this device", Toast.LENGTH_LONG).show();
         }
+        finish();
+    }
+
+    private void rejectCall() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            try {
+                telecomManager.endCall();
+                Log.d("IncomingCallActivity", "Call rejected successfully");
+                Toast.makeText(this, "Call rejected", Toast.LENGTH_SHORT).show();
+            } catch (SecurityException e) {
+                Log.e("IncomingCallActivity", "Permission to end calls not granted", e);
+                Toast.makeText(this, "Permission to reject calls not granted", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Log.w("IncomingCallActivity", "Rejecting calls not supported on this API level");
+            Toast.makeText(this, "Rejecting calls not supported on this device", Toast.LENGTH_LONG).show();
+        }
+        finish();
+    }
+
+    private void markAsSpam() {
+        if (normalizedNumber != null) {
+            databaseReference = FirebaseDatabase.getInstance().getReference("SpamNumbers").child(normalizedNumber);
+            databaseReference.child("status").setValue("spam", (error, ref) -> {
+                if (error == null) {
+                    Toast.makeText(IncomingCallActivity.this, "Number marked as spam", Toast.LENGTH_SHORT).show();
+                    Log.d("IncomingCallActivity", "Marked " + normalizedNumber + " as spam in Firebase");
+                } else {
+                    Toast.makeText(IncomingCallActivity.this, "Failed to mark as spam", Toast.LENGTH_SHORT).show();
+                    Log.e("IncomingCallActivity", "Firebase error marking as spam: " + error.getMessage());
+                }
+            });
+        }
+        finish();
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F1F1F1"
-    tools:context=".MainActivity">
+    tools:context=".Home"> <!-- Fixed context to match Home -->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -231,8 +231,8 @@
                         app:cardElevation="6dp">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
                             android:id="@+id/dialpad_home"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
@@ -265,8 +265,8 @@
                         app:cardElevation="6dp">
 
                         <LinearLayout
+                            android:id="@+id/search_home"
                             android:layout_width="match_parent"
-                            android:id="@+id/serach_home"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
@@ -453,15 +453,30 @@
                                 android:textSize="14sp" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
-
-                    <!-- Add other option cards here -->
-
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <!-- Call History Section -->
+            <!-- Spam Calls Section -->
             <TextView
                 android:id="@+id/textView15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="Spam Calls"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/spam_calls_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="8dp" />
+
+            <!-- Call History Section -->
+            <TextView
+                android:id="@+id/textViewCallHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -503,11 +518,9 @@
                             android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
-
-            <!-- Call History Section -->
+            <!-- Message History Section -->
             <TextView
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
@@ -528,10 +541,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#007BFF"
                     android:orientation="vertical">
 
-                    <!-- Call History Items -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -553,15 +564,9 @@
                             android:textColor="#757575"
                             android:textSize="12sp" />
                     </LinearLayout>
-
-
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
         </LinearLayout>
-
-
-
     </ScrollView>
 
     <!-- Bottom Navigation Menu -->
@@ -573,8 +578,5 @@
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:itemIconSize="24dp"
-        app:elevation="8dp">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
+        app:elevation="8dp" />
 </LinearLayout>

@@ -1,85 +1,98 @@
 package com.example.scanshield_mobile_app;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.telecom.Call;
 import android.telecom.CallScreeningService;
 import android.util.Log;
+import androidx.core.app.NotificationCompat;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MyCallScreeningService extends CallScreeningService {
-    private static final String TAG = "CallScreeningService";
+
+    private static final String CHANNEL_ID = "SpamCallChannel";
+    private DatabaseReference databaseReference;
 
     @Override
     public void onScreenCall(Call.Details callDetails) {
-        Uri handle = callDetails.getHandle();
-        if (handle == null) {
-            respondWithDefault(callDetails);
+        String phoneNumber = callDetails.getHandle() != null ? callDetails.getHandle().getSchemeSpecificPart() : null;
+        if (phoneNumber == null) {
+            Log.e("MyCallScreeningService", "Phone number is null");
+            respondToCall(callDetails, new CallResponse.Builder().build());
             return;
         }
 
-        String incomingNumber = handle.getSchemeSpecificPart();
-        String normalizedNumber = normalizePhoneNumber(incomingNumber);
-        Log.d(TAG, "Incoming number: " + incomingNumber + ", normalized: " + normalizedNumber);
+        String normalizedNumber = normalizePhoneNumber(phoneNumber);
+        Log.d("MyCallScreeningService", "Screening call from: " + phoneNumber + ", normalized: " + normalizedNumber);
 
-        if (normalizedNumber == null) {
-            respondWithDefault(callDetails);
-            return;
-        }
-
-        DatabaseReference database = FirebaseDatabase.getInstance("https://scanshield-project-default-rtdb.firebaseio.com/")
-                .getReference("SpamNumbers");
-        database.child(normalizedNumber).child("status").get().addOnCompleteListener(task -> {
-            CallResponse.Builder responseBuilder = new CallResponse.Builder()
-                    .setDisallowCall(false)
-                    .setRejectCall(false)
-                    .setSkipCallLog(false)
-                    .setSkipNotification(false);
-
-            String status = "unknown";
-            if (task.isSuccessful() && task.getResult() != null) {
-                status = task.getResult().getValue(String.class);
-                if ("spam".equalsIgnoreCase(status)) {
-                    responseBuilder.setRejectCall(true);
-                    responseBuilder.setDisallowCall(true);
-                    Log.d(TAG, "Call blocked as spam: " + normalizedNumber);
+        databaseReference = FirebaseDatabase.getInstance().getReference("SpamNumbers").child(normalizedNumber).child("status");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String status = dataSnapshot.getValue(String.class);
+                CallResponse response;
+                if ("spam".equals(status)) {
+                    Log.d("MyCallScreeningService", "Blocking spam call: " + normalizedNumber);
+                    response = new CallResponse.Builder()
+                            .setDisallowCall(true)
+                            .setRejectCall(true)
+                            .setSkipCallLog(false)
+                            .setSkipNotification(true)
+                            .build();
+                    showSpamNotification(phoneNumber); // Notify user
                 } else {
-                    Log.d(TAG, "Call marked as not spam: " + normalizedNumber);
+                    Log.d("MyCallScreeningService", "Allowing call: " + normalizedNumber);
+                    Intent intent = new Intent(MyCallScreeningService.this, IncomingCallActivity.class);
+                    intent.putExtra("incoming_number", phoneNumber);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    response = new CallResponse.Builder().build();
                 }
-            } else {
-                Log.e(TAG, "Failed to read status for " + normalizedNumber + ": " +
-                        (task.getException() != null ? task.getException().getMessage() : "Unknown error"));
+                respondToCall(callDetails, response);
             }
 
-            respondToCall(callDetails, responseBuilder.build());
-
-            // Notify IncomingCallActivity
-            Intent intent = new Intent(this, IncomingCallActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("caller_number", incomingNumber);
-            intent.putExtra("caller_status", status);
-            startActivity(intent);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("MyCallScreeningService", "Firebase error: " + databaseError.getMessage());
+                respondToCall(callDetails, new CallResponse.Builder().build());
+            }
         });
     }
 
-    private void respondWithDefault(Call.Details callDetails) {
-        CallResponse response = new CallResponse.Builder()
-                .setDisallowCall(false)
-                .setRejectCall(false)
-                .setSkipCallLog(false)
-                .setSkipNotification(false)
-                .build();
-        respondToCall(callDetails, response);
+    private String normalizePhoneNumber(String phoneNumber) {
+        String normalized = phoneNumber.replaceAll("[^0-9]", "");
+        normalized = normalized.substring(Math.max(0, normalized.length() - 10));
+        return normalized;
     }
 
-    private String normalizePhoneNumber(String number) {
-        if (number == null || number.isEmpty()) return null;
-        String normalized = number.replaceAll("[^0-9]", "");
-        if (normalized.startsWith("1") && normalized.length() > 10) {
-            normalized = normalized.substring(1);
+    private void showSpamNotification(String phoneNumber) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Spam Call Alerts", NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(channel);
         }
-        return normalized;
+
+        Intent intent = new Intent(this, Home.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .setContentTitle("Blocked Spam Call")
+                .setContentText("Blocked a spam call from " + phoneNumber)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build();
+
+        notificationManager.notify((int) System.currentTimeMillis(), notification);
     }
 }

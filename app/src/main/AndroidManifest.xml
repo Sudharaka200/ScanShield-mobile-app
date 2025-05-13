@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.scanshield_mobile_app">
 
-    <!-- Required Permissions -->
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,8 +16,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.BIND_SCREENING_SERVICE"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Telephony feature is optional -->
+    <!-- Optional: Feature for telephony (allows app to run on non-telephony devices) -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
     <application
@@ -32,17 +33,12 @@
         android:theme="@style/Theme.ScanShieldmobileapp"
         tools:targetApi="31">
 
-        <!-- ConnectionService for handling calls -->
-        <service
-            android:name=".MyConnectionService"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.telecom.ConnectionService" />
-            </intent-filter>
-        </service>
+        <!-- Meta-data for Google Play Services (if using Maps/Location) -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_GOOGLE_MAPS_API_KEY" />
 
-        <!-- Call Screening Service for spam detection -->
+        <!-- Call Screening Service -->
         <service
             android:name=".MyCallScreeningService"
             android:permission="android.permission.BIND_SCREENING_SERVICE"
@@ -52,26 +48,37 @@
             </intent-filter>
         </service>
 
-        <!-- Broadcast Receiver for SMS and possibly calls -->
+        <!-- Connection Service -->
+        <service
+            android:name=".MyConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
+
+        <!-- Broadcast Receiver -->
         <receiver
             android:name=".Receiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
                 <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
-        <!-- Incoming Call UI -->
+        <!-- Incoming Call Popup Activity -->
         <activity
             android:name=".IncomingCallActivity"
             android:theme="@style/AppTheme.Popup"
-            android:exported="false"
+            android:exported="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- Launcher Activity -->
         <activity
@@ -83,24 +90,17 @@
             </intent-filter>
         </activity>
 
-        <!-- Default Dialer Intents -->
+        <!-- Home Activity -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.DIAL" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.CALL" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:name=".Home"
+            android:exported="false" />
 
-        <!-- Other Activities -->
+        <!-- Onboarding Activities -->
         <activity android:name=".GetStarted1" android:exported="false" />
         <activity android:name=".GetStarted2" android:exported="false" />
         <activity android:name=".GetStarted3" android:exported="false" />
+
+        <!-- Other Activities -->
         <activity android:name=".spam_calls" android:exported="false" />
         <activity android:name=".CallHistoryActivity" android:exported="false" />
         <activity android:name=".blocked_numbers" android:exported="false" />
@@ -116,7 +116,7 @@
         <activity android:name=".SignUp" android:exported="false" />
         <activity android:name=".profile" android:exported="false" />
         <activity android:name=".SettingsActivity" android:exported="false" />
-        <activity android:name=".Home" android:exported="false" />
 
     </application>
+
 </manifest>

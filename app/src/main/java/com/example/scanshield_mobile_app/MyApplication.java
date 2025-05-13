@@ -1,8 +1,8 @@
 package com.example.scanshield_mobile_app;
 
 import android.app.Application;
-import com.google.firebase.FirebaseApp;
 import android.util.Log;
+import com.google.firebase.FirebaseApp;
 
 public class MyApplication extends Application {
     private static final String TAG = "MyApplication";

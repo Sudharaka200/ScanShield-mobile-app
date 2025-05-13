@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B3000000"
+    android:padding="24dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="456dp"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/caller_icon"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="Caller Icon"
+                android:src="@android:drawable/ic_menu_call"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/caller_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Unknown Number"
+                android:textColor="@android:color/black"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/caller_icon" />
+
+            <TextView
+                android:id="@+id/caller_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Status: unknown"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/caller_number" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_reject"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="88dp"
+                android:text="Reject"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:backgroundTint="@android:color/holo_red_light"
+                app:cornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_answer"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="88dp"
+                android:text="Answer"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:backgroundTint="@android:color/holo_green_light"
+                app:cornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_mark_as_spam"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="64dp"
+                android:text="Mark as Spam"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:backgroundTint="@android:color/holo_orange_dark"
+                app:cornerRadius="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_answer"
+                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintStart_toEndOf="@+id/button_reject"
+                app:layout_constraintTop_toTopOf="@id/button_reject" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
