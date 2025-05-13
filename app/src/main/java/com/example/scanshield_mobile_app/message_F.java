@@ -3,19 +3,11 @@ package com.example.scanshield_mobile_app;
 public class message_F {
     private String email;
     private String phoneNumber;
-    private String Message;
-    private String status;
-    private String DateTime;
+    private String message;
+    private String dateTime;
 
-    public message_F(){
-    }
-
-    public message_F(String email, String phoneNumber, String message, String status, String dateTime) {
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        Message = message;
-        this.status = status;
-        DateTime = dateTime;
+    public message_F() {
+        // Default constructor for Firebase
     }
 
     public String getEmail() {
@@ -35,26 +27,18 @@ public class message_F {
     }
 
     public String getMessage() {
-        return Message;
+        return message;
     }
 
     public void setMessage(String message) {
-        Message = message;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+        this.message = message;
     }
 
     public String getDateTime() {
-        return DateTime;
+        return dateTime;
     }
 
     public void setDateTime(String dateTime) {
-        DateTime = dateTime;
+        this.dateTime = dateTime;
     }
 }
