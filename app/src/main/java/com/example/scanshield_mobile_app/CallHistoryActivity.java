@@ -1,6 +1,7 @@
 package com.example.scanshield_mobile_app;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,11 +27,20 @@ public class CallHistoryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CallAdapter callAdapter;
     private ArrayList<CallLogModel> callList;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call_history);
+
+        // Initialize Firebase
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance("https://scanshield-project-default-rtdb.firebaseio.com/")
+                .getReference("callData");
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -34,6 +48,13 @@ public class CallHistoryActivity extends AppCompatActivity {
         callList = new ArrayList<>();
         callAdapter = new CallAdapter(this, callList);
         recyclerView.setAdapter(callAdapter);
+
+        if (user == null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+            return;
+        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -57,6 +78,7 @@ public class CallHistoryActivity extends AppCompatActivity {
                 String number = cursor.getString(numberIndex);
                 String normalizedNumber = normalizePhoneNumber(number);
                 String type;
+                boolean isSpam = false;
                 switch (cursor.getInt(typeIndex)) {
                     case CallLog.Calls.OUTGOING_TYPE:
                         type = "Outgoing";
@@ -69,6 +91,7 @@ public class CallHistoryActivity extends AppCompatActivity {
                         break;
                     case CallLog.Calls.REJECTED_TYPE:
                         type = "Rejected";
+                        isSpam = true; // Mark rejected calls as spam
                         break;
                     default:
                         type = "Other";
@@ -78,14 +101,37 @@ public class CallHistoryActivity extends AppCompatActivity {
                 long dateLong = Long.parseLong(cursor.getString(dateIndex));
                 String dateStr = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date(dateLong));
                 String timeStr = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date(dateLong));
+                String dateTime = dateStr + " " + timeStr;
                 String duration = cursor.getString(durationIndex);
                 String name = getContactName(normalizedNumber);
 
                 callList.add(new CallLogModel(normalizedNumber, name, type, dateStr, timeStr, duration));
+
+                // If the call is marked as spam, upload to Firebase
+                if (isSpam) {
+                    uploadToFirebase(normalizedNumber, type, dateTime);
+                }
             }
             cursor.close();
             callAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void uploadToFirebase(String phoneNumber, String callStatus, String dateTime) {
+        call_F call = new call_F();
+        call.setEmail(user.getEmail());
+        call.setPhoneNumber(phoneNumber);
+        call.setCallStatus(callStatus);
+        call.setDateTime(dateTime);
+        call.setIsSpam(true);
+
+        databaseReference.push().setValue(call)
+                .addOnSuccessListener(aVoid -> {
+                    // Successfully uploaded
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure
+                });
     }
 
     private String getContactName(String phoneNumber) {

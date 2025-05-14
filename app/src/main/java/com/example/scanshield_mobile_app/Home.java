@@ -128,7 +128,7 @@ public class Home extends AppCompatActivity {
         buttonMessages.setOnClickListener(v -> startActivity(new Intent(this, message_history.class)));
 
         LinearLayout buttonBlocked = findViewById(R.id.blocked_home);
-        buttonBlocked.setOnClickListener(v -> startActivity(new Intent(this, blocked_numbers.class)));
+        buttonBlocked.setOnClickListener(v -> startActivity(new Intent(this, spam_calls.class)));
 
         LinearLayout buttonSpam = findViewById(R.id.spam_home);
         buttonSpam.setOnClickListener(v -> startActivity(new Intent(this, spam_messages.class)));

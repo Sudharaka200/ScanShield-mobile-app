@@ -3,6 +3,7 @@ package com.example.scanshield_mobile_app;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class spam_calls extends AppCompatActivity {
 
+    private static final String TAG = "spam_calls";
     private FirebaseAuth mAuth;
     private TextView logedUser;
     private FirebaseUser user;
@@ -105,9 +107,11 @@ public class spam_calls extends AppCompatActivity {
                             call_F call = dataSnapshot.getValue(call_F.class);
                             if (call != null && Boolean.TRUE.equals(call.getIsSpam())) {
                                 spamCallList.add(call);
+                                Log.d(TAG, "Added spam call: " + call.getPhoneNumber() + " - " + call.getCallStatus());
                             }
                         }
                         spamCallAdapter.notifyDataSetChanged();
+                        Log.d(TAG, "Spam Call List Size: " + spamCallList.size());
                         if (spamCallList.isEmpty()) {
                             Toast.makeText(spam_calls.this, "No spam calls found", Toast.LENGTH_SHORT).show();
                         }
@@ -116,6 +120,7 @@ public class spam_calls extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Toast.makeText(spam_calls.this, "Failed to load spam calls: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Failed to load spam calls: " + error.getMessage());
                     }
                 });
     }
@@ -138,11 +143,9 @@ public class spam_calls extends AppCompatActivity {
         public void onBindViewHolder(@NonNull SpamCallViewHolder holder, int position) {
             call_F call = calls.get(position);
             holder.phoneNumber.setText(call.getPhoneNumber());
-            holder.callStatus.setText(call.getCallStatus());
-            holder.dateTime.setText(call.getDateTime());
-            // Color spam call status red with ! symbol
-            holder.callStatus.setText(call.getCallStatus() + " !");
+            holder.callStatus.setText("Spam !"); // Set status as "Spam !" for clarity
             holder.callStatus.setTextColor(Color.RED);
+            holder.dateTime.setText(call.getDateTime());
         }
 
         @Override
