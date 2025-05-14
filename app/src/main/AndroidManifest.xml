@@ -14,11 +14,11 @@
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_PHONE_CALL"
+        tools:targetApi="34" />
     <uses-permission android:name="android.permission.BIND_SCREENING_SERVICE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.MANAGE_CALL_SCREENING" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- Optional: Feature for telephony (allows app to run on non-telephony devices) -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
@@ -60,7 +60,16 @@
             </intent-filter>
         </service>
 
-        <!-- Broadcast Receiver -->
+        <!-- Broadcast Receiver for SMS -->
+        <receiver
+            android:name=".SmsReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Existing Receivers -->
         <receiver
             android:name=".Receiver"
             android:exported="true">
@@ -71,13 +80,15 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".PhoneCallReceiver" android:exported="true">
+        <receiver
+            android:name=".PhoneCallReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
 
-        <!-- Incoming Call Popup Activity -->
+        <!-- Existing Activities -->
         <activity
             android:name=".IncomingCallActivity"
             android:theme="@style/AppTheme.Popup"
@@ -86,9 +97,8 @@
             android:turnScreenOn="true"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-        android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden" />
 
-        <!-- Launcher Activity -->
         <activity
             android:name=".Loading2"
             android:exported="true">
@@ -98,34 +108,64 @@
             </intent-filter>
         </activity>
 
-        <!-- Home Activity -->
         <activity
             android:name=".Home"
             android:exported="false" />
 
-        <!-- Onboarding Activities -->
-        <activity android:name=".GetStarted1" android:exported="false" />
-        <activity android:name=".GetStarted2" android:exported="false" />
-        <activity android:name=".GetStarted3" android:exported="false" />
+        <activity
+            android:name=".GetStarted1"
+            android:exported="false" />
+        <activity
+            android:name=".GetStarted2"
+            android:exported="false" />
+        <activity
+            android:name=".GetStarted3"
+            android:exported="false" />
 
-        <!-- Other Activities -->
-        <activity android:name=".spam_calls" android:exported="false" />
-
-        <activity android:name=".CallHistoryActivity" android:exported="false" />
-        <activity android:name=".blocked_numbers" android:exported="false" />
-        <activity android:name=".spam_messages" android:exported="false" />
-        <activity android:name=".dialpad" android:exported="false" />
-        <activity android:name=".LoginActivity" android:exported="true" />
-        <activity android:name=".login_successfully" android:exported="false" />
-        <activity android:name=".protection" android:exported="false" />
-        <activity android:name=".number_search" android:exported="false" />
-        <activity android:name=".call_answered_screen" android:exported="false" />
-        <activity android:name=".normal_calls" android:exported="false" />
-        <activity android:name=".message_history" android:exported="false" />
-        <activity android:name=".SignUp" android:exported="false" />
-        <activity android:name=".profile" android:exported="false" />
-        <activity android:name=".SettingsActivity" android:exported="false" />
-
+        <activity
+            android:name=".spam_calls"
+            android:exported="false" />
+        <activity
+            android:name=".CallHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".blocked_numbers"
+            android:exported="false" />
+        <activity
+            android:name=".spam_messages"
+            android:exported="false" />
+        <activity
+            android:name=".dialpad"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".login_successfully"
+            android:exported="false" />
+        <activity
+            android:name=".protection"
+            android:exported="false" />
+        <activity
+            android:name=".number_search"
+            android:exported="false" />
+        <activity
+            android:name=".call_answered_screen"
+            android:exported="false" />
+        <activity
+            android:name=".normal_calls"
+            android:exported="false" />
+        <activity
+            android:name=".message_history"
+            android:exported="false" />
+        <activity
+            android:name=".SignUp"
+            android:exported="false" />
+        <activity
+            android:name=".profile"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
     </application>
-
 </manifest>

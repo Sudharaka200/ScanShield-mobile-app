@@ -1,7 +1,6 @@
 package com.example.scanshield_mobile_app;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,7 +33,7 @@ public class message_history extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference databaseReference;
     private RecyclerView recyclerView;
-    private MessageAdapter messageAdapter;
+    private MessageHistoryAdapter messageHistoryAdapter;
     private List<message_F> messageList;
 
     @Override
@@ -50,8 +49,8 @@ public class message_history extends AppCompatActivity {
         recyclerView = findViewById(R.id.message_history_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageList = new ArrayList<>();
-        messageAdapter = new MessageAdapter(messageList);
-        recyclerView.setAdapter(messageAdapter);
+        messageHistoryAdapter = new MessageHistoryAdapter(messageList);
+        recyclerView.setAdapter(messageHistoryAdapter);
 
         userCheck();
         setupBottomNavigation();
@@ -74,7 +73,6 @@ public class message_history extends AppCompatActivity {
 
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(R.id.nav_home); // Highlight appropriate item if needed
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_home) {
@@ -108,7 +106,7 @@ public class message_history extends AppCompatActivity {
                                 messageList.add(message);
                             }
                         }
-                        messageAdapter.notifyDataSetChanged();
+                        messageHistoryAdapter.notifyDataSetChanged();
                         if (messageList.isEmpty()) {
                             Toast.makeText(message_history.this, "No messages found", Toast.LENGTH_SHORT).show();
                         }
@@ -121,11 +119,10 @@ public class message_history extends AppCompatActivity {
                 });
     }
 
-    // RecyclerView Adapter
-    private class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
+    private class MessageHistoryAdapter extends RecyclerView.Adapter<MessageHistoryAdapter.MessageViewHolder> {
         private final List<message_F> messages;
 
-        public MessageAdapter(List<message_F> messages) {
+        public MessageHistoryAdapter(List<message_F> messages) {
             this.messages = messages;
         }
 
@@ -142,13 +139,7 @@ public class message_history extends AppCompatActivity {
             holder.phoneNumber.setText(message.getPhoneNumber());
             holder.messageText.setText(message.getMessage());
             holder.dateTime.setText(message.getDateTime());
-
-            // Apply spam detection
-            if (SpamDetector.isSpam(message.getMessage())) {
-                holder.messageText.setTextColor(Color.RED);
-            } else {
-                holder.messageText.setTextColor(Color.BLACK);
-            }
+            // No color change here, only spam messages will be red in spam_messages
         }
 
         @Override

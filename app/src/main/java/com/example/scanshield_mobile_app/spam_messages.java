@@ -103,7 +103,7 @@ public class spam_messages extends AppCompatActivity {
                         spamMessageList.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             message_F message = dataSnapshot.getValue(message_F.class);
-                            if (message != null && SpamDetector.isSpam(message.getMessage())) {
+                            if (message != null && Boolean.TRUE.equals(message.getIsSpam())) { // Check isSpam field
                                 spamMessageList.add(message);
                             }
                         }
@@ -120,7 +120,6 @@ public class spam_messages extends AppCompatActivity {
                 });
     }
 
-    // RecyclerView Adapter for Spam Messages
     private class SpamMessageAdapter extends RecyclerView.Adapter<SpamMessageAdapter.SpamMessageViewHolder> {
         private final List<message_F> messages;
 
@@ -141,7 +140,7 @@ public class spam_messages extends AppCompatActivity {
             holder.phoneNumber.setText(message.getPhoneNumber());
             holder.messageText.setText(message.getMessage());
             holder.dateTime.setText(message.getDateTime());
-            // All messages here are spam, so color them red
+            // Color spam messages red
             holder.messageText.setTextColor(Color.RED);
         }
 

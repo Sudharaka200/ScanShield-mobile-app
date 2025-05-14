@@ -5,6 +5,7 @@ public class message_F {
     private String phoneNumber;
     private String message;
     private String dateTime;
+    private Boolean isSpam; // Add this field to track spam status
 
     public message_F() {
         // Default constructor for Firebase
@@ -40,5 +41,13 @@ public class message_F {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public Boolean getIsSpam() {
+        return isSpam;
+    }
+
+    public void setIsSpam(Boolean isSpam) {
+        this.isSpam = isSpam;
     }
 }
