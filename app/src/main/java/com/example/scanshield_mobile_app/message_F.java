@@ -1,21 +1,25 @@
 package com.example.scanshield_mobile_app;
 
 public class message_F {
+    private String key; // Add this to store the Firebase key
     private String email;
     private String phoneNumber;
-    private String Message;
-    private String status;
-    private String DateTime;
+    private String message;
+    private String dateTime;
+    private Boolean isSpam;
+    private Boolean read;
+    private String replies;
 
-    public message_F(){
+    public message_F() {
+        // Default constructor for Firebase
     }
 
-    public message_F(String email, String phoneNumber, String message, String status, String dateTime) {
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        Message = message;
-        this.status = status;
-        DateTime = dateTime;
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getEmail() {
@@ -35,26 +39,42 @@ public class message_F {
     }
 
     public String getMessage() {
-        return Message;
+        return message;
     }
 
     public void setMessage(String message) {
-        Message = message;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+        this.message = message;
     }
 
     public String getDateTime() {
-        return DateTime;
+        return dateTime;
     }
 
     public void setDateTime(String dateTime) {
-        DateTime = dateTime;
+        this.dateTime = dateTime;
+    }
+
+    public Boolean getIsSpam() {
+        return isSpam != null ? isSpam : false; // Default to false if null
+    }
+
+    public void setIsSpam(Boolean isSpam) {
+        this.isSpam = isSpam;
+    }
+
+    public Boolean isRead() {
+        return read != null ? read : false; // Default to false if null
+    }
+
+    public void setRead(Boolean read) {
+        this.read = read;
+    }
+
+    public String getReplies() {
+        return replies != null ? replies : "";
+    }
+
+    public void setReplies(String replies) {
+        this.replies = replies;
     }
 }
