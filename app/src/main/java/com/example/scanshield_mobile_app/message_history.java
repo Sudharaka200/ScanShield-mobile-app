@@ -1,6 +1,7 @@
 package com.example.scanshield_mobile_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -139,7 +140,17 @@ public class message_history extends AppCompatActivity {
             holder.phoneNumber.setText(message.getPhoneNumber());
             holder.messageText.setText(message.getMessage());
             holder.dateTime.setText(message.getDateTime());
-            // No color change here, only spam messages will be red in spam_messages
+
+            // Check if the message is spam and apply red color with spam alert
+            if (Boolean.TRUE.equals(message.getIsSpam())) {
+                holder.messageText.setTextColor(Color.RED);
+                holder.spamAlert.setText("!"); // Red exclamation mark as spam alert
+                holder.spamAlert.setTextColor(Color.RED);
+                holder.spamAlert.setVisibility(View.VISIBLE);
+            } else {
+                holder.messageText.setTextColor(Color.BLACK); // Default color
+                holder.spamAlert.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -148,13 +159,14 @@ public class message_history extends AppCompatActivity {
         }
 
         public class MessageViewHolder extends RecyclerView.ViewHolder {
-            TextView phoneNumber, messageText, dateTime;
+            TextView phoneNumber, messageText, dateTime, spamAlert;
 
             public MessageViewHolder(@NonNull View itemView) {
                 super(itemView);
                 phoneNumber = itemView.findViewById(R.id.phone_number);
                 messageText = itemView.findViewById(R.id.message_text);
                 dateTime = itemView.findViewById(R.id.date_time);
+                spamAlert = itemView.findViewById(R.id.spam_alert); // Add this ID
             }
         }
     }
