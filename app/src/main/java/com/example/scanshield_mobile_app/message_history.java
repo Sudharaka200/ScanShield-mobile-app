@@ -24,8 +24,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class message_history extends AppCompatActivity {
 
@@ -36,6 +39,7 @@ public class message_history extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MessageHistoryAdapter messageHistoryAdapter;
     private List<message_F> messageList;
+    private TextView fullMessageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,7 @@ public class message_history extends AppCompatActivity {
 
         // Initialize UI components
         recyclerView = findViewById(R.id.message_history_recycler);
+        fullMessageView = findViewById(R.id.full_message_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         messageList = new ArrayList<>();
         messageHistoryAdapter = new MessageHistoryAdapter(messageList);
@@ -56,6 +61,18 @@ public class message_history extends AppCompatActivity {
         userCheck();
         setupBottomNavigation();
         fetchMessages();
+
+        // Handle intent from popup/notification
+        Intent intent = getIntent();
+        if (intent.hasExtra("sender")) {
+            String sender = intent.getStringExtra("sender");
+            String message = intent.getStringExtra("message");
+            long timestamp = intent.getLongExtra("timestamp", 0);
+            String formattedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date(timestamp));
+            fullMessageView.setText("From: " + sender + "\nTime: " + formattedDate + "\n\n" + message);
+            fullMessageView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
     }
 
     private void userCheck() {
@@ -104,6 +121,7 @@ public class message_history extends AppCompatActivity {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             message_F message = dataSnapshot.getValue(message_F.class);
                             if (message != null) {
+                                message.setKey(dataSnapshot.getKey()); // Set the Firebase key
                                 messageList.add(message);
                             }
                         }
@@ -142,7 +160,7 @@ public class message_history extends AppCompatActivity {
             holder.dateTime.setText(message.getDateTime());
 
             // Check if the message is spam and apply red color with spam alert
-            if (Boolean.TRUE.equals(message.getIsSpam())) {
+            if (message.getIsSpam()) {
                 holder.messageText.setTextColor(Color.RED);
                 holder.spamAlert.setText("!"); // Red exclamation mark as spam alert
                 holder.spamAlert.setTextColor(Color.RED);
@@ -151,6 +169,26 @@ public class message_history extends AppCompatActivity {
                 holder.messageText.setTextColor(Color.BLACK); // Default color
                 holder.spamAlert.setVisibility(View.GONE);
             }
+
+            // Check if the message is unread
+            if (!message.isRead()) {
+                holder.phoneNumber.setTextColor(Color.BLUE); // Highlight unread messages
+            } else {
+                holder.phoneNumber.setTextColor(Color.BLACK); // Default color for read messages
+            }
+
+            // Set click listener to open full message
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(message_history.this, FullMessageActivity.class);
+                intent.putExtra("phoneNumber", message.getPhoneNumber());
+                intent.putExtra("message", message.getMessage());
+                intent.putExtra("dateTime", message.getDateTime());
+                intent.putExtra("isSpam", message.getIsSpam());
+                intent.putExtra("read", message.isRead());
+                intent.putExtra("replies", message.getReplies());
+                intent.putExtra("messageKey", message.getKey()); // Use the stored key
+                startActivity(intent);
+            });
         }
 
         @Override
@@ -166,7 +204,7 @@ public class message_history extends AppCompatActivity {
                 phoneNumber = itemView.findViewById(R.id.phone_number);
                 messageText = itemView.findViewById(R.id.message_text);
                 dateTime = itemView.findViewById(R.id.date_time);
-                spamAlert = itemView.findViewById(R.id.spam_alert); // Add this ID
+                spamAlert = itemView.findViewById(R.id.spam_alert);
             }
         }
     }

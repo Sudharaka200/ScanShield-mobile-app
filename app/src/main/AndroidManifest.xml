@@ -23,6 +23,7 @@
     <!-- Optional: Feature for telephony (allows app to run on non-telephony devices) -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -50,6 +51,20 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".SMSReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".MessagePopupActivity"
+            android:theme="@android:style/Theme.Dialog"
+            android:exported="false" />
+        <activity
+            android:name=".message_history"
+            android:exported="false" />
+
         <!-- Connection Service -->
         <service
             android:name=".MyConnectionService"
@@ -62,7 +77,7 @@
 
         <!-- Broadcast Receiver for SMS -->
         <receiver
-            android:name=".SmsReceiver"
+            android:name=".SMSReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
@@ -89,6 +104,11 @@
         </receiver>
 
         <!-- Existing Activities -->
+
+        <activity
+            android:name=".FullMessageActivity"
+            android:exported="false" />
+
         <activity
             android:name=".IncomingCallActivity"
             android:theme="@style/AppTheme.Popup"

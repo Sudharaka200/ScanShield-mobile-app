@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.CallLog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +33,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Home extends AppCompatActivity {
     private static final String TAG = "Home";
@@ -49,26 +56,38 @@ public class Home extends AppCompatActivity {
     private RecyclerView spamCallsRecyclerView;
     private RecyclerView callHistoryRecyclerView;
     private RecyclerView messageHistoryRecyclerView;
+    private ProgressBar spamCallsProgressBar;
+    private ProgressBar callHistoryProgressBar;
+    private ProgressBar messageHistoryProgressBar;
     private List<SpamCallItem> spamCallsList;
     private List<CallHistoryItem> callHistoryList;
     private List<MessageHistoryItem> messageHistoryList;
     private SpamCallsAdapter spamCallsAdapter;
     private CallHistoryAdapter callHistoryAdapter;
     private MessageHistoryAdapter messageHistoryAdapter;
+    private ExecutorService executorService;
+    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // Initialize Executor and Handler for background tasks
+        executorService = Executors.newFixedThreadPool(3);
+        mainHandler = new Handler(Looper.getMainLooper());
+
         // Firebase setup
         firebaseDatabase = FirebaseDatabase.getInstance("https://scanshield-project-default-rtdb.firebaseio.com/");
-        databaseReference = firebaseDatabase.getReference("messageData");
+        databaseReference = firebaseDatabase.getReference("callData");
 
         // Initialize UI components
         spamCallsRecyclerView = findViewById(R.id.spam_calls_list);
         callHistoryRecyclerView = findViewById(R.id.call_history_list);
         messageHistoryRecyclerView = findViewById(R.id.message_history_list);
+        spamCallsProgressBar = findViewById(R.id.spam_calls_progress);
+        callHistoryProgressBar = findViewById(R.id.call_history_progress);
+        messageHistoryProgressBar = findViewById(R.id.message_history_progress);
 
         spamCallsRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false));
         callHistoryRecyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false));
@@ -91,8 +110,8 @@ public class Home extends AppCompatActivity {
         navigationButtons();
         setupBottomNavigation();
 
-        // Load data
-        loadBlockedCalls();
+        // Load data asynchronously
+        loadSpamCalls();
         loadCallHistory();
         loadMessageHistory();
 
@@ -160,9 +179,7 @@ public class Home extends AppCompatActivity {
             return;
         }
 
-        // Store dateTime as a Unix timestamp (milliseconds)
         long currentDateTime = System.currentTimeMillis();
-
         message_F message_f = new message_F();
         message_f.setEmail(user.getEmail());
         message_f.setPhoneNumber(phoneNumber);
@@ -186,53 +203,83 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    private void loadBlockedCalls() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            Log.e(TAG, "READ_CALL_LOG permission not granted");
-            Toast.makeText(this, "Call log permission required", Toast.LENGTH_SHORT).show();
+    private void loadSpamCalls() {
+        if (user == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String[] projection = new String[]{
-                CallLog.Calls.NUMBER,
-                CallLog.Calls.DATE,
-                CallLog.Calls.TYPE
-        };
-        String selection = CallLog.Calls.TYPE + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(CallLog.Calls.BLOCKED_TYPE)};
+        // Show loading indicator
+        spamCallsProgressBar.setVisibility(View.VISIBLE);
+        spamCallsRecyclerView.setVisibility(View.GONE);
 
-        Cursor cursor = getContentResolver().query(
-                CallLog.Calls.CONTENT_URI,
-                projection,
-                selection,
-                selectionArgs,
-                CallLog.Calls.DATE + " DESC"
-        );
+        databaseReference.orderByChild("email").equalTo(user.getEmail())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<call_F> tempList = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            call_F call = dataSnapshot.getValue(call_F.class);
+                            if (call != null && Boolean.TRUE.equals(call.getIsSpam())) {
+                                tempList.add(call);
+                            }
+                        }
 
-        spamCallsList.clear();
-        if (cursor != null) {
-            int count = 0;
-            while (cursor.moveToNext() && count < 10) {
-                String number = cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER));
-                long date = cursor.getLong(cursor.getColumnIndexOrThrow(CallLog.Calls.DATE));
-                String formattedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date(date));
-                spamCallsList.add(new SpamCallItem(number, formattedDate));
-                count++;
-                Log.d(TAG, "Added blocked call: " + number + " - " + formattedDate);
-            }
-            cursor.close();
-            spamCallsAdapter.notifyDataSetChanged();
-            Log.d(TAG, "Spam Calls List Size: " + spamCallsList.size());
-            if (spamCallsList.isEmpty()) {
-                Log.w(TAG, "No blocked calls found in call log");
-                spamCallsList.add(new SpamCallItem("No blocked calls found", ""));
-                spamCallsAdapter.notifyDataSetChanged();
-            }
-        } else {
-            Log.e(TAG, "Cursor is null when querying call log");
-            spamCallsList.add(new SpamCallItem("Error loading blocked calls", ""));
-            spamCallsAdapter.notifyDataSetChanged();
-        }
+                        // Process and sort data in a background thread
+                        executorService.execute(() -> {
+                            // Sort by dateTime in descending order (latest first)
+                            Collections.sort(tempList, new Comparator<call_F>() {
+                                @Override
+                                public int compare(call_F c1, call_F c2) {
+                                    try {
+                                        Date d1 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).parse(c1.getDateTime());
+                                        Date d2 = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).parse(c2.getDateTime());
+                                        return d2.compareTo(d1); // Descending order
+                                    } catch (ParseException e) {
+                                        Log.e(TAG, "Failed to parse dateTime: " + e.getMessage());
+                                        return 0;
+                                    }
+                                }
+                            });
+
+                            // Limit to 22 items
+                            List<SpamCallItem> newSpamCallsList = new ArrayList<>();
+                            int limit = Math.min(22, tempList.size());
+                            for (int i = 0; i < limit; i++) {
+                                call_F call = tempList.get(i);
+                                newSpamCallsList.add(new SpamCallItem(call.getPhoneNumber(), call.getDateTime()));
+                            }
+
+                            // Update UI on the main thread
+                            mainHandler.post(() -> {
+                                spamCallsList.clear();
+                                spamCallsList.addAll(newSpamCallsList);
+                                spamCallsAdapter.notifyDataSetChanged();
+                                Log.d(TAG, "Spam Calls List Size: " + spamCallsList.size());
+                                if (spamCallsList.isEmpty()) {
+                                    Log.w(TAG, "No spam calls found in Firebase");
+                                    spamCallsList.add(new SpamCallItem("No spam calls found", ""));
+                                    spamCallsAdapter.notifyDataSetChanged();
+                                }
+                                // Hide loading indicator
+                                spamCallsProgressBar.setVisibility(View.GONE);
+                                spamCallsRecyclerView.setVisibility(View.VISIBLE);
+                            });
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e(TAG, "Failed to load spam calls: " + error.getMessage());
+                        mainHandler.post(() -> {
+                            spamCallsList.clear();
+                            spamCallsList.add(new SpamCallItem("Error loading spam calls", ""));
+                            spamCallsAdapter.notifyDataSetChanged();
+                            spamCallsProgressBar.setVisibility(View.GONE);
+                            spamCallsRecyclerView.setVisibility(View.VISIBLE);
+                        });
+                    }
+                });
     }
 
     private void loadCallHistory() {
@@ -242,46 +289,52 @@ public class Home extends AppCompatActivity {
             return;
         }
 
-        String[] projection = new String[]{
-                CallLog.Calls.NUMBER,
-                CallLog.Calls.DATE,
-                CallLog.Calls.TYPE
-        };
+        // Show loading indicator
+        callHistoryProgressBar.setVisibility(View.VISIBLE);
+        callHistoryRecyclerView.setVisibility(View.GONE);
 
-        Cursor cursor = getContentResolver().query(
-                CallLog.Calls.CONTENT_URI,
-                projection,
-                null,
-                null,
-                CallLog.Calls.DATE + " DESC"
-        );
+        // Perform call log query in a background thread
+        executorService.execute(() -> {
+            List<CallHistoryItem> newCallHistoryList = new ArrayList<>();
+            Cursor cursor = getContentResolver().query(
+                    CallLog.Calls.CONTENT_URI,
+                    new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.TYPE},
+                    null,
+                    null,
+                    CallLog.Calls.DATE + " DESC"
+            );
 
-        callHistoryList.clear();
-        if (cursor != null) {
-            int count = 0;
-            while (cursor.moveToNext() && count < 10) {
-                String number = cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER));
-                long date = cursor.getLong(cursor.getColumnIndexOrThrow(CallLog.Calls.DATE));
-                String formattedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date(date));
-                callHistoryList.add(new CallHistoryItem(number, formattedDate));
-                count++;
-                Log.d(TAG, "Added call history: " + number + " - " + formattedDate);
+            if (cursor != null) {
+                int count = 0;
+                while (cursor.moveToNext() && count < 10) {
+                    String number = cursor.getString(cursor.getColumnIndexOrThrow(CallLog.Calls.NUMBER));
+                    long date = cursor.getLong(cursor.getColumnIndexOrThrow(CallLog.Calls.DATE));
+                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date(date));
+                    newCallHistoryList.add(new CallHistoryItem(number, formattedDate));
+                    count++;
+                    Log.d(TAG, "Added call history: " + number + " - " + formattedDate);
+                }
+                cursor.close();
             }
-            cursor.close();
-            callHistoryAdapter.notifyDataSetChanged();
-            Log.d(TAG, "Call History List Size: " + callHistoryList.size());
-            if (callHistoryList.isEmpty()) {
-                Log.w(TAG, "No call history found in call log, adding dummy data");
-                callHistoryList.add(new CallHistoryItem("1234567890", "14/05/2025 14:30"));
-                callHistoryList.add(new CallHistoryItem("0987654321", "14/05/2025 14:31"));
-                callHistoryList.add(new CallHistoryItem("5555555555", "14/05/2025 14:32"));
+
+            // Update UI on the main thread
+            mainHandler.post(() -> {
+                callHistoryList.clear();
+                callHistoryList.addAll(newCallHistoryList);
                 callHistoryAdapter.notifyDataSetChanged();
-            }
-        } else {
-            Log.e(TAG, "Cursor is null when querying call log");
-            callHistoryList.add(new CallHistoryItem("Error loading call history", ""));
-            callHistoryAdapter.notifyDataSetChanged();
-        }
+                Log.d(TAG, "Call History List Size: " + callHistoryList.size());
+                if (callHistoryList.isEmpty()) {
+                    Log.w(TAG, "No call history found in call log, adding dummy data");
+                    callHistoryList.add(new CallHistoryItem("1234567890", "14/05/2025 14:30"));
+                    callHistoryList.add(new CallHistoryItem("0987654321", "14/05/2025 14:31"));
+                    callHistoryList.add(new CallHistoryItem("5555555555", "14/05/2025 14:32"));
+                    callHistoryAdapter.notifyDataSetChanged();
+                }
+                // Hide loading indicator
+                callHistoryProgressBar.setVisibility(View.GONE);
+                callHistoryRecyclerView.setVisibility(View.VISIBLE);
+            });
+        });
     }
 
     private void loadMessageHistory() {
@@ -290,11 +343,15 @@ public class Home extends AppCompatActivity {
             return;
         }
 
-        databaseReference.orderByChild("email").equalTo(user.getEmail())
+        // Show loading indicator
+        messageHistoryProgressBar.setVisibility(View.VISIBLE);
+        messageHistoryRecyclerView.setVisibility(View.GONE);
+
+        firebaseDatabase.getReference("messageData").orderByChild("email").equalTo(user.getEmail())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        messageHistoryList.clear();
+                        List<MessageHistoryItem> newMessageHistoryList = new ArrayList<>();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             message_F message = dataSnapshot.getValue(message_F.class);
                             if (message != null) {
@@ -308,29 +365,43 @@ public class Home extends AppCompatActivity {
                                         date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateTime);
                                     }
                                     String formattedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(date);
-                                    messageHistoryList.add(new MessageHistoryItem(message.getPhoneNumber(), formattedDate));
+                                    newMessageHistoryList.add(new MessageHistoryItem(message.getPhoneNumber(), formattedDate));
                                 } catch (ParseException | NumberFormatException e) {
                                     Log.e(TAG, "Failed to parse dateTime: " + dateTime, e);
-                                    messageHistoryList.add(new MessageHistoryItem(message.getPhoneNumber(), "Invalid date"));
+                                    newMessageHistoryList.add(new MessageHistoryItem(message.getPhoneNumber(), "Invalid date"));
                                 }
                             }
                         }
-                        messageHistoryAdapter.notifyDataSetChanged();
-                        Log.d(TAG, "Message History List Size: " + messageHistoryList.size());
-                        if (messageHistoryList.isEmpty()) {
-                            Log.w(TAG, "No message history found in Firebase, adding dummy data");
-                            messageHistoryList.add(new MessageHistoryItem("1234567890", "14/05/2025 14:30"));
-                            messageHistoryList.add(new MessageHistoryItem("0987654321", "14/05/2025 14:31"));
-                            messageHistoryList.add(new MessageHistoryItem("5555555555", "14/05/2025 14:32"));
+
+                        // Update UI on the main thread
+                        mainHandler.post(() -> {
+                            messageHistoryList.clear();
+                            messageHistoryList.addAll(newMessageHistoryList);
                             messageHistoryAdapter.notifyDataSetChanged();
-                        }
+                            Log.d(TAG, "Message History List Size: " + messageHistoryList.size());
+                            if (messageHistoryList.isEmpty()) {
+                                Log.w(TAG, "No message history found in Firebase, adding dummy data");
+                                messageHistoryList.add(new MessageHistoryItem("1234567890", "14/05/2025 14:30"));
+                                messageHistoryList.add(new MessageHistoryItem("0987654321", "14/05/2025 14:31"));
+                                messageHistoryList.add(new MessageHistoryItem("5555555555", "14/05/2025 14:32"));
+                                messageHistoryAdapter.notifyDataSetChanged();
+                            }
+                            // Hide loading indicator
+                            messageHistoryProgressBar.setVisibility(View.GONE);
+                            messageHistoryRecyclerView.setVisibility(View.VISIBLE);
+                        });
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e(TAG, "Failed to load message history: " + error.getMessage());
-                        messageHistoryList.add(new MessageHistoryItem("Error loading message history", ""));
-                        messageHistoryAdapter.notifyDataSetChanged();
+                        mainHandler.post(() -> {
+                            messageHistoryList.clear();
+                            messageHistoryList.add(new MessageHistoryItem("Error loading message history", ""));
+                            messageHistoryAdapter.notifyDataSetChanged();
+                            messageHistoryProgressBar.setVisibility(View.GONE);
+                            messageHistoryRecyclerView.setVisibility(View.VISIBLE);
+                        });
                     }
                 });
     }
@@ -348,12 +419,17 @@ public class Home extends AppCompatActivity {
             }
             if (allGranted) {
                 Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show();
-                loadBlockedCalls();
                 loadCallHistory();
             } else {
                 Toast.makeText(this, "Permissions denied. Cannot load call data.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdown();
     }
 
     // Custom classes to hold data

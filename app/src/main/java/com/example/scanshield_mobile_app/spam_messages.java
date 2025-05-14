@@ -103,7 +103,8 @@ public class spam_messages extends AppCompatActivity {
                         spamMessageList.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             message_F message = dataSnapshot.getValue(message_F.class);
-                            if (message != null && Boolean.TRUE.equals(message.getIsSpam())) { // Check isSpam field
+                            if (message != null && Boolean.TRUE.equals(message.getIsSpam())) {
+                                message.setKey(dataSnapshot.getKey()); // Set the Firebase key
                                 spamMessageList.add(message);
                             }
                         }
@@ -142,6 +143,19 @@ public class spam_messages extends AppCompatActivity {
             holder.dateTime.setText(message.getDateTime());
             // Color spam messages red
             holder.messageText.setTextColor(Color.RED);
+
+            // Set click listener to open full message
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(spam_messages.this, FullMessageActivity.class);
+                intent.putExtra("phoneNumber", message.getPhoneNumber());
+                intent.putExtra("message", message.getMessage());
+                intent.putExtra("dateTime", message.getDateTime());
+                intent.putExtra("isSpam", message.getIsSpam());
+                intent.putExtra("read", message.isRead());
+                intent.putExtra("replies", message.getReplies());
+                intent.putExtra("messageKey", message.getKey()); // Use the stored key
+                startActivity(intent);
+            });
         }
 
         @Override
@@ -150,13 +164,19 @@ public class spam_messages extends AppCompatActivity {
         }
 
         public class SpamMessageViewHolder extends RecyclerView.ViewHolder {
-            TextView phoneNumber, messageText, dateTime;
+            TextView phoneNumber, messageText, dateTime, spamAlert;
 
             public SpamMessageViewHolder(@NonNull View itemView) {
                 super(itemView);
                 phoneNumber = itemView.findViewById(R.id.phone_number);
                 messageText = itemView.findViewById(R.id.message_text);
                 dateTime = itemView.findViewById(R.id.date_time);
+                spamAlert = itemView.findViewById(R.id.spam_alert);
+                if (spamAlert != null) {
+                    spamAlert.setText("!");
+                    spamAlert.setTextColor(Color.RED);
+                    spamAlert.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
