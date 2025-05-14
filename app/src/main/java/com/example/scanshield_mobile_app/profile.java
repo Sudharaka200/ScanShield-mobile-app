@@ -1,7 +1,5 @@
 package com.example.scanshield_mobile_app;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;

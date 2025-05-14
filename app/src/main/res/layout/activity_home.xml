@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F1F1F1"
-    tools:context=".Home"> <!-- Fixed context to match Home -->
+    tools:context=".Home">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -213,7 +213,8 @@
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:scrollbars="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -466,13 +467,20 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <ListView
-                android:id="@+id/spam_calls_list"
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="8dp" />
+                android:padding="16dp"
+                android:scrollbars="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/spam_calls_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/item_spam_call_home" />
+            </HorizontalScrollView>
 
             <!-- Call History Section -->
             <TextView
@@ -484,41 +492,20 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <androidx.cardview.widget.CardView
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardBackgroundColor="#FFF"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="6dp">
+                android:padding="16dp"
+                android:scrollbars="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/call_history_list"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Call History Items -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="+971 - 9900000000X"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="16 minutes ago"
-                            android:textColor="#757575"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/item_call_history_home" />
+            </HorizontalScrollView>
 
             <!-- Message History Section -->
             <TextView
@@ -530,42 +517,20 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <androidx.cardview.widget.CardView
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardBackgroundColor="#FFF"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="6dp">
+                android:padding="16dp"
+                android:scrollbars="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/message_history_list"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:id="@+id/textMessages"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="+971 - 9900000000X"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/textMessageTime"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="16 minutes ago"
-                            android:textColor="#757575"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    android:orientation="horizontal"
+                    tools:listitem="@layout/item_message_history_home" />
+            </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
 

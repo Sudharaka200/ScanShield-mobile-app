@@ -2,15 +2,13 @@ package com.example.scanshield_mobile_app;
 
 public class call_F {
     private String email;
-    private String phonenumber;
-    private String status;
-    private String datetime;
+    private String phoneNumber;
+    private String callStatus;
+    private String dateTime;
+    private Boolean isSpam;
 
-    public call_F(String email, String phonenumber, String status, String datetime) {
-        this.email = email;
-        this.phonenumber = phonenumber;
-        this.status = status;
-        this.datetime = datetime;
+    public call_F() {
+        // Default constructor for Firebase
     }
 
     public String getEmail() {
@@ -21,27 +19,35 @@ public class call_F {
         this.email = email;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getStatus() {
-        return status;
+    public String getCallStatus() {
+        return callStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCallStatus(String callStatus) {
+        this.callStatus = callStatus;
     }
 
-    public String getDatetime() {
-        return datetime;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public Boolean getIsSpam() {
+        return isSpam;
+    }
+
+    public void setIsSpam(Boolean isSpam) {
+        this.isSpam = isSpam;
     }
 }
