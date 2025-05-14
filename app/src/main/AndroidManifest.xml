@@ -17,6 +17,8 @@
     <uses-permission android:name="android.permission.BIND_SCREENING_SERVICE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.MANAGE_CALL_SCREENING" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- Optional: Feature for telephony (allows app to run on non-telephony devices) -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
@@ -69,6 +71,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".PhoneCallReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
         <!-- Incoming Call Popup Activity -->
         <activity
             android:name=".IncomingCallActivity"
@@ -77,8 +85,8 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden" />
+            android:launchMode="singleTop"
+        android:windowSoftInputMode="stateHidden" />
 
         <!-- Launcher Activity -->
         <activity
@@ -102,6 +110,7 @@
 
         <!-- Other Activities -->
         <activity android:name=".spam_calls" android:exported="false" />
+
         <activity android:name=".CallHistoryActivity" android:exported="false" />
         <activity android:name=".blocked_numbers" android:exported="false" />
         <activity android:name=".spam_messages" android:exported="false" />

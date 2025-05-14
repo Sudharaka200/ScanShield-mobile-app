@@ -26,13 +26,13 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="AppTheme.Popup" parent="Theme.MaterialComponents.Light.Dialog">
-        <item name="android:windowIsFloating">true</item>
+    <style name="AppTheme.Popup" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowIsFloating">false</item> <!-- Changed to false for full-screen -->
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
-        <item name="android:windowFullscreen">true</item> <!-- Ensure full screen -->
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 </resources>

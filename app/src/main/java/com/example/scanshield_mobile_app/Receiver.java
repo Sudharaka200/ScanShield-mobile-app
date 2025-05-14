@@ -7,6 +7,8 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.example.scanshield_mobile_app.IncomingCallActivity;
+
 
 public class Receiver extends BroadcastReceiver {
     private static final String TAG = "Receiver";
@@ -39,6 +41,7 @@ public class Receiver extends BroadcastReceiver {
 
                         // Launch popup
                         Intent popupIntent = new Intent(context, IncomingCallActivity.class);
+
                         popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         popupIntent.putExtra("caller_number", incomingNumber);
                         popupIntent.putExtra("spam_type", status != null ? status : "unknown");

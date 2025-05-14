@@ -1,0 +1,10 @@
+<!-- res/drawable/ic_spam.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M13,2H11V4H13V2ZM13,6H11V8H13V6ZM13,10H11V12H13V10ZM13,14H11V16H13V14ZM13,18H11V20H13V18ZM15,4L15.5,6H8.5L9,4H15Z"/>
+</vector>
