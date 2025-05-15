@@ -4,9 +4,9 @@
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">80dp</item>
         <item name="android:layout_margin">8dp</item>
-        <item name="android:background">@drawable/circle_button</item>
+        <item name="android:background">@drawable/circle_button</item> <!-- custom white button -->
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">#000000</item> <!-- black text -->
     </style>
 
     <style name="CallButton">
@@ -18,16 +18,8 @@
         <item name="android:textColor">#0066FF</item>
     </style>
 
-    <style name="Theme.ScanShieldmobileapp" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#007BFF</item>
-        <item name="colorPrimaryDark">#0056b3</item>
-        <item name="colorAccent">#03DAC5</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">true</item>
-    </style>
-
     <style name="AppTheme.Popup" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowIsFloating">false</item> <!-- Changed to false for full-screen -->
+        <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
