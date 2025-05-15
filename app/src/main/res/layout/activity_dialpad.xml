@@ -69,7 +69,7 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/Entered_Numbers"
+                    android:id="@+id/Entered_NumbersCall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="50dp"
@@ -114,7 +114,7 @@
                 </GridLayout>
 
                 <ImageButton
-                    android:id="@+id/callButton"
+                    android:id="@+id/callButtonNumber"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginTop="-20dp"

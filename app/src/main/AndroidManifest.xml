@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.BIND_SCREENING_SERVICE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <!-- Optional: Feature for telephony (allows app to run on non-telephony devices) -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />

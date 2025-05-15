@@ -1,15 +1,21 @@
 package com.example.scanshield_mobile_app;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -17,6 +23,8 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import android.Manifest;
+
 
 
 public class dialpad extends AppCompatActivity {
@@ -24,6 +32,8 @@ public class dialpad extends AppCompatActivity {
     FirebaseAuth mAuth;
     TextView logUser;
     FirebaseUser user;
+
+    static int PERMISSION_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +43,7 @@ public class dialpad extends AppCompatActivity {
 
         dialPadButtons();
         userCheck();
+        getDialedNumberForCall();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -78,7 +89,7 @@ public class dialpad extends AppCompatActivity {
 
     public void dialPadButtons(){
         //DialPad Setup
-        TextView numberDisplay = findViewById(R.id.Entered_Numbers);
+        TextView numberDisplay = findViewById(R.id.Entered_NumbersCall);
         Button btn1 =  findViewById(R.id.NumButton1);
         Button btn2 = findViewById(R.id.NumButton2);
         Button btn3 = findViewById(R.id.NumButton3);
@@ -189,5 +200,27 @@ public class dialpad extends AppCompatActivity {
                 numberDisplay.setText(numberBuilder.toString());
             }
         });
+    }
+
+    public void getDialedNumberForCall(){
+        TextView phoneNumberTxt = findViewById(R.id.Entered_NumbersCall);
+        ImageView callBtn = findViewById(R.id.callButtonNumber);
+
+        if (ContextCompat.checkSelfPermission(dialpad.this,Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(dialpad.this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_CODE);
+        }
+
+        callBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String phoneNumber = phoneNumberTxt.getText().toString();
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+phoneNumber));
+                startActivity(callIntent);
+
+            }
+        });
+
     }
 }
