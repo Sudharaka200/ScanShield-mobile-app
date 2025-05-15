@@ -106,48 +106,6 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Dark Mode -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#FFFFFF">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:id="@+id/dark_mode"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Dark Mode"
-                                android:textColor="#000000"
-                                android:textSize="16sp"
-                                android:clickable="true"
-                                android:focusable="true" />
-
-                            <FrameLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:minWidth="48dp"
-                                android:minHeight="48dp"
-                                android:foreground="?android:attr/selectableItemBackgroundBorderless">
-
-                                <Switch
-                                    android:id="@+id/switch_darkmode"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content" />
-                            </FrameLayout>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
                     <!-- Detection Types -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -170,35 +128,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Detection Types"
-                                android:textColor="#000000"
-                                android:textSize="16sp"
-                                android:clickable="true"
-                                android:focusable="true" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Blacklist Management -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#FFFFFF">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:id="@+id/blacklist_management"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Blacklist Management"
                                 android:textColor="#000000"
                                 android:textSize="16sp"
                                 android:clickable="true"

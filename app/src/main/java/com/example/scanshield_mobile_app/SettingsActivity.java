@@ -2,8 +2,11 @@ package com.example.scanshield_mobile_app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -30,6 +34,10 @@ public class SettingsActivity extends Activity {
     private static final String KEY_EMAIL = "userEmail";
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String TAG = "SettingsActivity";
+    private static final String KEY_NOTIFICATIONS_ENABLED = "notificationsEnabled";
+    private static final String NOTIFICATION_CHANNEL_ID = "scanshield_channel";
+    private static final String TAG2 = "SettingsActivity";
+    private static final int NOTIFICATION_PERMISSION_REQUEST_CODE = 100;
 
 
     @Override
@@ -49,15 +57,39 @@ public class SettingsActivity extends Activity {
             return;
         }
 
+        // Initialize notification channel
+        createNotificationChannel();
+
+        // Request notification permission (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION_REQUEST_CODE);
+            }
+        }
+
         // Optionally set user email in TextView (currently shows "Settings")
         TextView emailTextView = findViewById(R.id.LogUserEmailHome);
 
         // Initialize settings items
         Switch notificationsSwitch = findViewById(R.id.switch_notifications);
-        Switch darkModeSwitch = findViewById(R.id.switch_darkmode);
         TextView detectionTypes = findViewById(R.id.detection_types);
-        TextView blacklistManagement = findViewById(R.id.blacklist_management);
         TextView deleteAccount = findViewById(R.id.delete_account);
+
+        // Load notification state from SharedPreferences
+        boolean notificationsEnabled = prefs.getBoolean(KEY_NOTIFICATIONS_ENABLED, true);
+        notificationsSwitch.setChecked(notificationsEnabled);
+        updateNotificationSettings(notificationsEnabled);
+        Log.d(TAG, "Notifications initialized: enabled=" + notificationsEnabled);
+
+        // Notification switch listener
+        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(KEY_NOTIFICATIONS_ENABLED, isChecked);
+            editor.apply();
+            updateNotificationSettings(isChecked);
+            Toast.makeText(this, "Notifications " + (isChecked ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Notifications toggled: enabled=" + isChecked);
+        });
 
         detectionTypes.setOnClickListener(v -> {
             Log.d(TAG, "Detection Types clicked, starting DetectionTypes");
@@ -65,11 +97,6 @@ public class SettingsActivity extends Activity {
             startActivity(intent);
         });
 
-        blacklistManagement.setOnClickListener(v -> {
-            Log.d(TAG, "Blacklist Management clicked, starting BlacklistManagement");
-            Intent intent = new Intent(SettingsActivity.this, blacklist_management.class);
-            startActivity(intent);
-        });
 
         // Delete Account functionality
         deleteAccount.setOnClickListener(v -> {
@@ -138,6 +165,33 @@ public class SettingsActivity extends Activity {
         bottomNavigationView.setSelectedItemId(R.id.nav_settings);
     }
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    "ScanShield Notifications",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            channel.setDescription("Notifications for ScanShield alerts");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+            Log.d(TAG, "Notification channel created: " + NOTIFICATION_CHANNEL_ID);
+        }
+    }
+
+    private void updateNotificationSettings(boolean enabled) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID);
+            if (channel != null) {
+                channel.setImportance(enabled ? NotificationManager.IMPORTANCE_DEFAULT : NotificationManager.IMPORTANCE_NONE);
+                notificationManager.createNotificationChannel(channel);
+                Log.d(TAG, "Notification channel updated: importance=" + (enabled ? "DEFAULT" : "NONE"));
+            }
+        }
+        // Additional logic to suppress notifications (e.g., set a flag for your notification logic)
+    }
+
     private void deleteRealtimeDatabaseData(FirebaseUser user, String userId, SharedPreferences prefs) {
         Log.d(TAG, "Attempting to delete Realtime Database data for UID: " + userId);
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("users").child(userId);
@@ -192,6 +246,19 @@ public class SettingsActivity extends Activity {
                                 .show();
                     }
                 });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Notification permission granted");
+            } else {
+                Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "Notification permission denied");
+            }
+        }
     }
 }
 
