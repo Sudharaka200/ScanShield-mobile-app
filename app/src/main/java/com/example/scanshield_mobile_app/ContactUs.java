@@ -48,7 +48,7 @@ public class ContactUs extends AppCompatActivity {
                 // Fallback intent: ACTION_SEND
                 Intent fallbackIntent = new Intent(Intent.ACTION_SEND);
                 fallbackIntent.setType("message/rfc822");
-                fallbackIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"dinithpalihakkara2001@gmail.com"});   //getsupport@scanshield@gmail.com
+                fallbackIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"scanshieldmobileapp@gmail.com"});   //getsupport@scanshield@gmail.com
                 fallbackIntent.putExtra(Intent.EXTRA_SUBJECT, "Support Request");
                 if (fallbackIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(fallbackIntent);

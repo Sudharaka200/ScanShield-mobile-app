@@ -121,8 +121,7 @@ public class SettingsActivity extends Activity {
                     .show();
         });
 
-
-        //bottom navigation menu
+        // Initialize BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -130,14 +129,10 @@ public class SettingsActivity extends Activity {
                 if (item.getItemId() == R.id.nav_home) {
                     startActivity(new Intent(SettingsActivity.this, Home.class));
                     return true;
-                } else if (item.getItemId() == R.id.nav_settings) {
-                    return true;
                 } else if (item.getItemId() == R.id.nav_profile) {
                     startActivity(new Intent(SettingsActivity.this, profile.class));
                     return true;
-                } else {
-                    return false;
-                }
+                } else return item.getItemId() == R.id.nav_settings;
             }
         });
         bottomNavigationView.setSelectedItemId(R.id.nav_settings);
