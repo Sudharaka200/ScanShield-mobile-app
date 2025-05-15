@@ -44,7 +44,6 @@ public class profile extends AppCompatActivity {
         emailTextView.setText(currentUser.getEmail());
 
         // Initialize CardView items
-        TextView personalInfo = findViewById(R.id.textView12);
         TextView settings = findViewById(R.id.textView13);
         TextView spamCalls = findViewById(R.id.textView14);
         TextView spamMessages = findViewById(R.id.textView17);

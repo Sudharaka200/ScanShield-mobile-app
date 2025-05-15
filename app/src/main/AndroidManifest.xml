@@ -186,5 +186,8 @@
         <activity
             android:name=".ContactUs"
             android:exported="false" />
+        <activity
+            android:name=".DetectionTypes"
+            android:exported="false" />
     </application>
 </manifest>
