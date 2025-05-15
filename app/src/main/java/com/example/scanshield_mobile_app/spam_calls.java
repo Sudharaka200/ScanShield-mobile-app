@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -55,9 +56,35 @@ public class spam_calls extends AppCompatActivity {
         spamCallAdapter = new SpamCallAdapter(spamCallList);
         recyclerView.setAdapter(spamCallAdapter);
 
-        userCheck();
-        setupBottomNavigation();
+        userCheck();;
         fetchSpamCalls();
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Prevent any item from being pre-selected
+        bottomNavigationView.getMenu().setGroupCheckable(0, true, false);
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            bottomNavigationView.getMenu().getItem(i).setChecked(false);
+        }
+
+        // Set the item selected listener
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_home) {
+                    startActivity(new Intent(spam_calls.this, Home.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_settings) {
+                    startActivity(new Intent(spam_calls.this, SettingsActivity.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_profile) {
+                    startActivity(new Intent(spam_calls.this, profile.class));
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     private void userCheck() {
@@ -72,24 +99,6 @@ public class spam_calls extends AppCompatActivity {
         } else {
             logedUser.setText(user.getEmail());
         }
-    }
-
-    private void setupBottomNavigation() {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_home) {
-                startActivity(new Intent(spam_calls.this, Home.class));
-                return true;
-            } else if (itemId == R.id.nav_settings) {
-                startActivity(new Intent(spam_calls.this, SettingsActivity.class));
-                return true;
-            } else if (itemId == R.id.nav_profile) {
-                startActivity(new Intent(spam_calls.this, profile.class));
-                return true;
-            }
-            return false;
-        });
     }
 
     private void fetchSpamCalls() {

@@ -7,11 +7,17 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.view.MenuItem;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +34,7 @@ public class CallHistoryActivity extends AppCompatActivity {
     private CallAdapter callAdapter;
     private ArrayList<CallLogModel> callList;
     private FirebaseAuth mAuth;
+    private TextView lUser;
     private FirebaseUser user;
     private DatabaseReference databaseReference;
 
@@ -61,6 +68,47 @@ public class CallHistoryActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_CONTACTS}, PERMISSION_REQUEST_CODE);
         } else {
             loadCallLogs();
+        }
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        // Prevent any item from being pre-selected
+        bottomNavigationView.getMenu().setGroupCheckable(0, true, false);
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            bottomNavigationView.getMenu().getItem(i).setChecked(false);
+        }
+
+        // Set the item selected listener
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.nav_home) {
+                    startActivity(new Intent(CallHistoryActivity.this, Home.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_settings) {
+                    startActivity(new Intent(CallHistoryActivity.this, SettingsActivity.class));
+                    return true;
+                } else if (item.getItemId() == R.id.nav_profile) {
+                    startActivity(new Intent(CallHistoryActivity.this, profile.class));
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
+
+    private void userCheck() {
+        mAuth = FirebaseAuth.getInstance();
+        lUser = findViewById(R.id.LogUserEmailHome);
+        user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        } else {
+            lUser.setText(user.getEmail());
         }
     }
 

@@ -148,9 +148,7 @@
         <activity
             android:name=".CallHistoryActivity"
             android:exported="false" />
-        <activity
-            android:name=".blocked_numbers"
-            android:exported="false" />
+
         <activity
             android:name=".spam_messages"
             android:exported="false" />
@@ -175,9 +173,7 @@
         <activity
             android:name=".normal_calls"
             android:exported="false" />
-        <activity
-            android:name=".message_history"
-            android:exported="false" />
+
         <activity
             android:name=".SignUp"
             android:exported="false" />
@@ -186,6 +182,9 @@
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactUs"
             android:exported="false" />
     </application>
 </manifest>
